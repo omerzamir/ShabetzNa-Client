@@ -1,0 +1,10 @@
+<app-mini-calendar></app-mini-calendar>
+
+<span #types *ngFor="let typeOfMission of typesOfMission">
+  <h3 md-subheader>{{ typeOfMission }}</h3>
+    <md-selection-list>
+      <md-list-option *ngFor="let missionType of missionTypes[typeOfMission]">
+        {{ missionType }}
+      </md-list-option>
+    </md-selection-list>
+</span>

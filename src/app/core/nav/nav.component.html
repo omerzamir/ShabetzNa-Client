@@ -1,0 +1,17 @@
+<div dir="rtl" id="nav">
+  <md-toolbar color="primary">
+    <span><md-icon>mood</md-icon></span>
+
+    <span style="margin: auto">שבץ נא</span>
+    <md-menu #appMenu="mdMenu">
+      <button md-menu-item> Settings </button>
+      <button md-menu-item> Help </button>
+    </md-menu>
+    <button md-icon-button [mdMenuTriggerFor]="appMenu">
+      <md-icon>more_vert</md-icon>
+   </button>
+
+  </md-toolbar>
+
+  
+</div>
