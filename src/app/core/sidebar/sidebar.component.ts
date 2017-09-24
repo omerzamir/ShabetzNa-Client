@@ -13,5 +13,9 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  typesOfMission = ["בדיקה", "בדיקה2"];
+  missionTypes = {
+    "בדיקה": ["עומר"], 
+    "בדיקה2": ["בדיקות"]
+  }
 }

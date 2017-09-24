@@ -23,7 +23,7 @@ import {
   CalendarEventTimesChangedEvent
 } from 'angular-calendar';
 import { Subscription } from 'rxjs/Subscription';
-// import { MiniCalendarService } from '../_services/index';
+import { MiniCalendarService } from '../_services/index';
 
 const colors: any = {
   red: {
@@ -49,8 +49,6 @@ export class CalendarComponent implements OnDestroy{
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
   view: string = 'month';
-
-  viewDate: Date = new Date();
 
   modalData: {
     action: string;
@@ -109,18 +107,23 @@ export class CalendarComponent implements OnDestroy{
     }
   ];
 
+  viewDate: Date = new Date();  
   activeDayIsOpen: boolean = true;
   subscription: Subscription;
   
-  // constructor(private modal: NgbModal, private miniCalendarService: MiniCalendarService) {
-  //   // subscribe to home component messages
-  //   this.subscription = this.miniCalendarService.getDate().subscribe(date => { this.viewDate = date; });
-  // }
-  constructor(private modal: NgbModal) {
+  constructor(private modal: NgbModal, private miniCalendarService: MiniCalendarService) {
+    // subscribe to home component messages
+    this.subscription = this.miniCalendarService.getDate().subscribe((date) => {
+      this.viewDate = new Date(date.newDate);
+      console.log(this.viewDate);
+      this.refresh.next();
+    });
   }
+  // constructor(private modal: NgbModal) {
+  //}
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
-    // this.subscription.unsubscribe();
+    this.subscription.unsubscribe();
 }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
