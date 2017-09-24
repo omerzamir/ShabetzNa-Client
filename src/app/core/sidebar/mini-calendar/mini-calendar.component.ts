@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { MiniCalendarService } from '../../../_services/index';
 import { MdDatepickerModule, MdCalendar } from '@angular/material'
 
@@ -12,18 +12,16 @@ export class MiniCalendarComponent implements OnInit {
 
   private selectedDate: Date;
 
-  constructor(private miniCalendarService: MiniCalendarService) { }
+  constructor(private miniCalendarService: MiniCalendarService, private elementRef: ElementRef) { }
   
   ngOnInit() {
   }
 
-  onClick(): void {
-    // if(this.selectedDate instanceof Date){
-      // send date to subscribers via observable subject
-      console.log();
-      // this.miniCalendarService.changeDate(new Date(this.selectedDate));
-    // }
-    
+  onClick(event): void {
+    // send date to subscribers via observable subject
+    let date: any = event.srcElement.offsetParent.attributes["aria-label"].value;
+    if(date) {
+      this.miniCalendarService.changeDate(new Date(date));
+    }
   }
-    
 }
