@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { MiniCalendarService } from '../../../_services/index';
 import { MdDatepickerModule, MdCalendar } from '@angular/material'
 
@@ -12,7 +12,7 @@ export class MiniCalendarComponent implements OnInit {
 
   private selectedDate: Date;
 
-  constructor(private miniCalendarService: MiniCalendarService, private elementRef: ElementRef) { }
+  constructor(private miniCalendarService: MiniCalendarService) { }
   
   ngOnInit() {
   }
