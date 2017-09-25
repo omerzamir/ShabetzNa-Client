@@ -1,6 +1,8 @@
-<md-grid-list cols="12" gutterSize="5" rowHeight="65px">
-  <md-grid-tile [colspan]="12">
-    <app-nav style="width:100%;margin-top:-3.5%;"></app-nav>
+<!-- <md-grid-list layout="column" layout-align="space-between stretch">
+     <md-grid-list cols="12" gutterSize="5" rowHeight="65px" layout="column" layout-align="start stretch"> 
+        
+  <md-grid-tile [colspan]="12" [rowspan]="2" fit>
+    <app-nav style="width:100%;"></app-nav>
   </md-grid-tile>
 
     <md-grid-tile [colspan]="9" [rowspan]="12" style="margin-top:-3.5%;">
@@ -12,8 +14,30 @@
         <app-sidebar></app-sidebar>
     </md-grid-tile>
   <md-grid-tile [colspan]="12">
-    <app-footer></app-footer>
+      <app-footer></app-footer>
   </md-grid-tile>
 </md-grid-list>
-<!-- <md-spinner></md-spinner> -->
+ <md-spinner></md-spinner>
 
+
+
+ layout="row" layout-wrap
+ -->
+
+<div>
+  <app-nav style="width:100%;"></app-nav>
+</div>
+
+<div class="left" style="height:40%; width:60%; margin-top:1%;">
+  <!-- <div flex="70" class="left" style="height:40%;width:60%;">             -->
+  <app-calendar style="width:100%; margin-left:5%; float:left;height:40%"></app-calendar>
+</div>
+
+<div class="right" style="width:10%;margin-right:2%;">
+  <!-- <div flex="30" class="right" style="width:10%;">             -->
+  <app-sidebar></app-sidebar>
+</div>
+
+<div>
+  <app-footer></app-footer>
+</div>

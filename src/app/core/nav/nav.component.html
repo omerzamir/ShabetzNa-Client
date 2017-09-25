@@ -1,17 +1,12 @@
-<div dir="rtl" id="nav">
-  <md-toolbar color="primary">
-    <span><md-icon>mood</md-icon></span>
+<md-toolbar dir="rtl" id="nav" color="primary">
+  <span><md-icon>mood</md-icon></span>
 
-    <span style="margin: auto">שבץ נא</span>
-    <md-menu #appMenu="mdMenu">
-      <button md-menu-item> Settings </button>
-      <button md-menu-item> Help </button>
-    </md-menu>
-    <button md-icon-button [mdMenuTriggerFor]="appMenu">
+  <span style="margin: auto">שבץ נא</span>
+  <md-menu #menu="mdMenu">
+    <button md-menu-item> Settings </button>
+    <button md-menu-item> Help </button>
+  </md-menu>
+  <button md-icon-button [mdMenuTriggerFor]="menu">
       <md-icon>more_vert</md-icon>
    </button>
-
-  </md-toolbar>
-
-  
-</div>
+</md-toolbar>
