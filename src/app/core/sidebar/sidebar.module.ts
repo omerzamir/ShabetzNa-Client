@@ -2,11 +2,15 @@ import { NgModule } from '@angular/core';
 import { MiniCalendarComponent } from './mini-calendar/mini-calendar.component';
 
 @NgModule({
-    imports: [MiniCalendarComponent],
+    imports: [
+        MiniCalendarComponent,
+    ],
     declarations: [
         MiniCalendarComponent
     ],
-    exports:[]
+    exports: [
+    ],
+    providers: [
+    ]
   })
-  export class CoreModule { }
-  
+  export class CoreModule {}

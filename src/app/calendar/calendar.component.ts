@@ -114,7 +114,11 @@ export class CalendarComponent implements OnDestroy {
   constructor(private modal: NgbModal, private miniCalendarService: MiniCalendarService) {
     // subscribe to home component messages
     this.subscription = this.miniCalendarService.getDate().subscribe((date) => {
-      this.viewDate = new Date(date.newDate);
+
+      if (date.newDate != 'Invalid Date') {
+        this.viewDate = date.newDate;
+      }
+
       this.refresh.next();
     });
   }
