@@ -41,11 +41,11 @@ const colors: any = {
 };
 @Component({
   selector: 'app-calendar',
-  changeDetection: ChangeDetectionStrategy.OnPush,  
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
-export class CalendarComponent implements OnDestroy{
+export class CalendarComponent implements OnDestroy {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
   view: string = 'month';
@@ -107,15 +107,14 @@ export class CalendarComponent implements OnDestroy{
     }
   ];
 
-  viewDate: Date = new Date();  
+  viewDate: Date = new Date();
   activeDayIsOpen: boolean = true;
-  subscription: Subscription;
-  
+    subscription: Subscription;
+
   constructor(private modal: NgbModal, private miniCalendarService: MiniCalendarService) {
     // subscribe to home component messages
     this.subscription = this.miniCalendarService.getDate().subscribe((date) => {
       this.viewDate = new Date(date.newDate);
-      console.log(this.viewDate);
       this.refresh.next();
     });
   }
@@ -124,7 +123,7 @@ export class CalendarComponent implements OnDestroy{
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
     this.subscription.unsubscribe();
-}
+  }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -140,7 +139,7 @@ export class CalendarComponent implements OnDestroy{
     }
   }
 
-  public changeViewDate(date:Date): void {
+  public changeViewDate(date: Date): void {
     this.viewDate = date;
   }
 
