@@ -3,9 +3,10 @@
 <span #types *ngFor="let typeOfMission of typesOfMission" dir="rtl">
   <h3 md-subheader>{{ typeOfMission.text }}</h3>
     <md-selection-list>
-      {{missionTypes}}
-      <!-- <md-list-option *ngFor="let missionType of missionTypes[typeOfMission.code]" dir="ltr">
-       {{ missionType }} 
-      </md-list-option> -->
+      <span *ngFor="let missionType of missionTypes" dir="ltr">
+          <md-list-option *ngIf="missionType.type == typeOfMission.code" dir="ltr">
+            {{ missionType.name }} 
+          </md-list-option>
+      </span>
     </md-selection-list>
 </span>
