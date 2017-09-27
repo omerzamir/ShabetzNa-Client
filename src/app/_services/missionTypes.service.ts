@@ -4,9 +4,10 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class MissionTypesService {
-    constructor(private http: Http) {}
+    constructor(private http: Http) {
+    }
 
-    private readonly apiURL: string = 'localhost:3001/api/missiontype/';
+    private readonly apiURL: string = 'http://localhost:3001/api/missiontype/';
 
     getMissionTypes() {
         return this.http.get(this.apiURL)
