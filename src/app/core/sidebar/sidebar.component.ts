@@ -13,18 +13,14 @@ import { MissionTypesService } from '../../_services/index';
 })
 export class SidebarComponent implements OnInit {
   typesOfMission;
-  rawMissionTypes;
   missionTypes;
   constructor(private missionTypesService: MissionTypesService) {
-    // (this.rawMissionTypes).forEach(e => {
-    //   this.missionTypes.push(e);
-    // });
+
   }
 
   ngOnInit(): void {
     this.missionTypesService.getMissionTypes().subscribe((data) => {
       this.missionTypes = data;
-      console.log(this.missionTypes);
     });
     this.typesOfMission = [
       {

@@ -10,10 +10,6 @@ export class MiniCalendarService {
       this.subject.next({ newDate: date });
   }
 
-  clearDate() {
-      this.subject.next();
-  }
-
   getDate(): Observable<any> {
       return this.subject.asObservable();
   }

@@ -4,8 +4,8 @@
   <h3 md-subheader>{{ typeOfMission.text }}</h3>
     <md-selection-list>
       <span *ngFor="let missionType of missionTypes" dir="ltr">
-          <md-list-option *ngIf="missionType.type == typeOfMission.code" dir="ltr">
-            {{ missionType.name }} 
+          <md-list-option *ngIf="missionType.type == typeOfMission.code" dir="ltr" style="float:right;">
+            {{ missionType.name }}
           </md-list-option>
       </span>
     </md-selection-list>

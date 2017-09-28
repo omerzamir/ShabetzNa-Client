@@ -10,8 +10,6 @@ import { MdCalendar } from '@angular/material';
 })
 export class MiniCalendarComponent implements OnInit {
 
-  private selectedDate: Date;
-
   constructor(private miniCalendarService: MiniCalendarService) { }
 
   ngOnInit() {
