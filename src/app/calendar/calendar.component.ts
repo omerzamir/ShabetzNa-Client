@@ -8,14 +8,15 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import {
+  isSameMonth,
+  isSameDay,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
   startOfDay,
   endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours
+  format
 } from 'date-fns';
 import { Subject } from 'rxjs/Subject';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -25,10 +26,11 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarDateFormatter,
   DAYS_OF_WEEK,
-  CalendarMonthViewDay
+  CalendarMonthViewDay, CalendarUtils
 } from 'angular-calendar';
 import { Subscription } from 'rxjs/Subscription';
-import { MiniCalendarService } from '../_services/index';
+import { Observable } from 'rxjs/Observable';
+import { MiniCalendarService, MissionService } from '../_services/index';
 import { CustomDateFormatter } from './custom-date-formatter.provider';
 import * as Hebcal from 'libhdate';
 import * as moment from 'moment';
@@ -47,6 +49,16 @@ const colors: any = {
     secondary: '#FDF1BA'
   }
 };
+
+interface Mission {
+  id: string;
+  type: string;
+  startDate: Date;
+  endDate: Date;
+  status: number;
+  participents: string[];
+}
+
 @Component({
   selector: 'app-calendar',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,11 +68,12 @@ const colors: any = {
     {
       provide: CalendarDateFormatter,
       useClass: CustomDateFormatter
-    }
+    },
+    MissionService
   ],
   encapsulation: ViewEncapsulation.Emulated
 })
-export class CalendarComponent implements OnDestroy {
+export class CalendarComponent implements OnDestroy, OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
   view: string = 'month';
@@ -79,14 +92,14 @@ export class CalendarComponent implements OnDestroy {
   actions: CalendarEventAction[] = [
     {
       label: '<i class="fa fa-fw fa-pencil"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
+      onClick: ({ event }: { event: CalendarEvent<{ mission: Mission }> }): void => {
         this.handleEvent('Edited', event);
       }
     },
     {
       label: '<i class="fa fa-fw fa-times"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
+      onClick: ({ event }: { event: CalendarEvent<{ mission: Mission }> }): void => {
+        // this.events$ = this.events$.filter(iEvent => iEvent !== event);
         this.handleEvent('Deleted', event);
       }
     }
@@ -94,15 +107,15 @@ export class CalendarComponent implements OnDestroy {
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [
-  ];
+  // events: CalendarEvent[] = [
+  // ];
+  events$: Observable<Array<CalendarEvent<{ event: Mission }>>>;
 
   viewDate: Date = new Date();
   activeDayIsOpen: boolean = true;
   subscription: Subscription;
 
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
-    this.events = [];
     let heb = new Hebcal;
     body.forEach(day => {
       heb.setGdate(day.date.getDate(), day.date.getMonth() + 1, day.date.getFullYear());
@@ -115,67 +128,103 @@ export class CalendarComponent implements OnDestroy {
           actions: this.actions
         });
       }
+
+      // const daysInMonth = moment(this.viewDate.getFullYear() + '-' + this.viewDate.getMonth(), 'YYYY-MM').daysInMonth();
+      // console.log(daysInMonth);
+      // new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDay(), 0, 0, 0),
+      // new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDay(), 23, 59, 59))
+
     });
   }
 
-  constructor(private modal: NgbModal, private miniCalendarService: MiniCalendarService) {
+  constructor(private modal: NgbModal, private miniCalendarService: MiniCalendarService, private missionService: MissionService) {
     // subscribe to home component messages
     this.subscription = this.miniCalendarService.getDate().subscribe((date) => {
       if (date.newDate != 'Invalid Date') {
-        // if month or year has changed
-        // if (this.viewDate.getMonth() !== date.newDate.getMonth() || this.viewDate.getFullYear() !== date.newDate.getFullYear()) {
-
-        //   // Create hebrew date obj
-        //   let heb = new Hebcal;
-
-        //   // for each day in current month
-        //   for (let i = 1; i <= moment(date.newDate.getFullYear() + '-' + (date.newDate.getMonth() + 1), 'YYYY-MM').daysInMonth(); i++) {
-
-        //     // set the date
-        //     heb.setGdate(i, date.newDate.getMonth() + 1, date.newDate.getFullYear());
-
-        //     // if there is a holiday at this date
-        //     if (Number(heb.getHolyday(heb, false)) !== 0) {
-        //       this.events.push({
-        //         start: new Date(date.newDate.getFullYear(), date.newDate.getMonth(), i),
-        //         end: new Date(date.newDate.getFullYear(), date.newDate.getMonth(), i),
-        //         title: heb.getHolydayName(heb.getHolyday(heb, false)),
-        //         color: colors.yellow,
-        //         actions: this.actions
-        //       });
-        //     }
-        //   }
-        // }
         this.viewDate = date.newDate;
         this.refresh.next();
       }
     });
+    const daysInMonth = moment(this.viewDate.getFullYear() + '-' + this.viewDate.getMonth(), 'YYYY-MM').daysInMonth();
+    this.missionService.getMissionsByRange(
+      new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 0, 0, 0, 0),
+      new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), daysInMonth, 23, 59, 59))
+      .subscribe((data) => {
+        for (let e of data) {
+          // this.events$.push({
+          //   start: e.startDate,
+          //   end: e.endDate,
+          //   title: 'test',
+          //   color: colors.red,
+          //   actions: this.actions
+          // });
+          this.refresh.next();
+        }
+      });
+    this.refresh.next();
   }
 
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
     this.subscription.unsubscribe();
-    this.events = [];
+    this.events$ = undefined;
   }
 
-  // ngOnInit() {
-  //   // let heb = new Hebcal;
-  //   // for (let i = 1; i <= moment(this.viewDate.getFullYear() + '-' + (this.viewDate.getMonth() + 1), 'YYYY-MM').daysInMonth(); i++) {
-  //   //   heb.setGdate(i, this.viewDate.getMonth() + 1, this.viewDate.getFullYear());
-  //   //   if (heb.getHolyday(heb, false) !== 0) {
-  //   //     this.addEvent({
-  //   //       start: new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, i),
-  //   //       end: new Date(this.viewDate.getFullYear(), this.viewDate.getMonth() + 1, i),
-  //   //       title: heb.getHolydayName(heb.getHolyday(heb, false)),
-  //   //       color: colors.yellow,
-  //   //       actions: this.actions
-  //   //     });
-  //   //   }
-  //   // }
-  //   // this.refresh.next();
-  // }
+  ngOnInit() {
+    this.fetchEvents();
+  }
 
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+
+  fetchEvents(): void {
+    const getStart: any = {
+      month: startOfMonth,
+      week: startOfWeek,
+      day: startOfDay
+    }[this.view];
+
+    const getEnd: any = {
+      month: endOfMonth,
+      week: endOfWeek,
+      day: endOfDay
+    }[this.view];
+
+    const daysInMonth = moment(this.viewDate.getFullYear() + '-' + this.viewDate.getMonth(), 'YYYY-MM').daysInMonth();
+    this.events$ = this.missionService.getMissionsByRange(
+      new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 0, 0, 0, 0),
+      new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), daysInMonth, 23, 59, 59))
+      .map(( results: Mission[] ) => {
+        return results.map((event: Mission) => {
+          return {
+            title: "test",
+              start: new Date(event.startDate),
+              end: new Date(event.endDate),
+              color: colors.yellow,
+              meta: {
+                event
+              }
+          };
+        });
+      });
+    // this.events$ = this.missionService.getMissionsByRange(
+    //   new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 0, 0, 0, 0),
+    //   new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), daysInMonth, 23, 59, 59))
+    //   .subscribe(({ results }: { results: Mission[] }) => {
+    //     return results.map((mission: Mission) => {
+    //       return {
+    //         title: "test",
+    //         start: new Date(mission.startDate),
+    //         end: new Date(mission.endDate),
+    //         color: colors.yellow,
+    //         meta: {
+    //           mission
+    //         }
+    //       };
+    //     });
+    //   });
+  }
+
+
+  dayClicked({ date, events }: { date: Date; events:  Array<CalendarEvent<{ mission: Mission }>> }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
@@ -204,13 +253,13 @@ export class CalendarComponent implements OnDestroy {
     this.refresh.next();
   }
 
-  handleEvent(action: string, event: CalendarEvent): void {
+  handleEvent(action: string, event: CalendarEvent<{ mission: Mission }>): void {
     this.modalData = { event, action };
     this.modal.open(this.modalContent, { size: 'lg' });
   }
 
   addEvent(event): void {
-    this.events.push(event);
+    // this.events$.push(event);
     this.refresh.next();
   }
 }

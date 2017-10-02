@@ -1,2 +1,3 @@
-export * from './mini-calendar.service';
-export * from './missionTypes.service';
+export { MiniCalendarService } from './mini-calendar.service';
+export { MissionTypesService } from './missionTypes.service';
+export { MissionService } from './mission.service';

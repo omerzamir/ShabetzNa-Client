@@ -22,4 +22,9 @@ describe('MiniCalendarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // Should present the mini calendar
+
+  // Should affect the calendar.
+
 });

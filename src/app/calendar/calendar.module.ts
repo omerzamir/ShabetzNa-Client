@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CalendarModule } from 'angular-calendar';
+import { CalendarModule, CalendarUtils } from 'angular-calendar';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { MdGridListModule } from '@angular/material';
 import { CalendarComponent } from './calendar.component';

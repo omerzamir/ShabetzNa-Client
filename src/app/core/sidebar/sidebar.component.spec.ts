@@ -22,4 +22,9 @@ describe('SidebarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // Should present the mission types from the server.
+
+  // Should present the mini calendar.
+
 });
