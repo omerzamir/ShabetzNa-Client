@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MiniCalendarComponent } from './mini-calendar/mini-calendar.component';
-import { MissionTypesService } from '../../_services/index';
+import { MissionTypesService, SidebarService } from '../../_services/index';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,14 +8,16 @@ import { MissionTypesService } from '../../_services/index';
   styleUrls: ['./sidebar.component.css'],
   providers: [
     MiniCalendarComponent,
-    MissionTypesService
+    MissionTypesService,
+    SidebarService
   ]
 })
 export class SidebarComponent implements OnInit {
   typesOfMission;
   missionTypes;
-  constructor(private missionTypesService: MissionTypesService) {
-
+  selectedTypesId: string[];
+  constructor(private missionTypesService: MissionTypesService, private sidebarService: SidebarService) {
+    this.selectedTypesId = [];
   }
 
   ngOnInit(): void {
@@ -32,5 +34,18 @@ export class SidebarComponent implements OnInit {
         text: 'קבע'
       }
     ];
+  }
+
+  onClick(selected): void {
+    if(this.selectedTypesId.includes(selected._id)) {
+      this.selectedTypesId = this.selectedTypesId.filter((val:string)=> {
+        return val != selected._id;
+      });
+    }
+    else {
+      this.selectedTypesId.push(selected._id);      
+    }
+
+    this.sidebarService.sendFilter(this.selectedTypesId);
   }
 }

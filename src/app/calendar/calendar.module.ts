@@ -5,6 +5,7 @@ import { CalendarModule, CalendarUtils } from 'angular-calendar';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { MdGridListModule } from '@angular/material';
 import { CalendarComponent } from './calendar.component';
+import { Filter } from './missionFilter.pipe'
 
 @NgModule({
   imports: [
@@ -14,7 +15,10 @@ import { CalendarComponent } from './calendar.component';
     CalendarModule.forRoot(),
     MdGridListModule
   ],
-  declarations: [CalendarComponent],
+  declarations: [
+    CalendarComponent, 
+    Filter
+  ],
   exports: [CalendarComponent]
 })
 export class MyCalendarModule {}

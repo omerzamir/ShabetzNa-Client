@@ -16,7 +16,8 @@
     </div>
   </div>
   
-  <div *ngIf="events$ | async; else loading; let events" style="width:100%">
+  <!-- (events)?filterEvents: filterBy -->
+  <div *ngIf="events$ | async as events" #cal style="width:100%">      
     <div [ngSwitch]="view" style="width:100%">
       <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events" [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen"
         (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)" [locale]="locale" [weekStartsOn]="weekStartsOn" [weekendDays]="weekendDays" style="direction:rtl" (beforeViewRender)="beforeMonthViewRender($event)">

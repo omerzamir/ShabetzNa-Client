@@ -30,10 +30,11 @@ import {
 } from 'angular-calendar';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
-import { MiniCalendarService, MissionService } from '../_services/index';
+import { MiniCalendarService, MissionService, MissionTypesService, SidebarService } from '../_services/index';
 import { CustomDateFormatter } from './custom-date-formatter.provider';
 import * as Hebcal from 'libhdate';
 import * as moment from 'moment';
+import { Filter } from './missionFilter.pipe';
 
 const colors: any = {
   red: {
@@ -59,6 +60,13 @@ interface Mission {
   participents: string[];
 }
 
+interface MissionType {
+  _id: string;
+  name: string;
+  description: string;
+  type: number;
+}
+
 @Component({
   selector: 'app-calendar',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -69,7 +77,10 @@ interface Mission {
       provide: CalendarDateFormatter,
       useClass: CustomDateFormatter
     },
-    MissionService
+    MissionService,
+    MissionTypesService,
+    SidebarService,
+    Filter
   ],
   encapsulation: ViewEncapsulation.Emulated
 })
@@ -107,14 +118,14 @@ export class CalendarComponent implements OnDestroy, OnInit {
 
   refresh: Subject<any> = new Subject();
 
-  // events: CalendarEvent[] = [
-  // ];
   events$: Observable<Array<CalendarEvent<{ event: Mission }>>>;
+  types: MissionType[];
 
   viewDate: Date = new Date();
   activeDayIsOpen: boolean = true;
   subscription: Subscription;
-
+  sidebarSubscription: Subscription;
+  filterBy: string[] = [];
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
     let heb = new Hebcal;
     body.forEach(day => {
@@ -127,40 +138,56 @@ export class CalendarComponent implements OnDestroy, OnInit {
           color: colors.yellow,
           actions: this.actions
         });
+        // this.events$.subscribe(value => {
+        //   return {
+        //     start: new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate()),
+        //     end: new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate()),
+        //     title: heb.getHolydayName(heb.getHolyday(heb, false)),
+        //     color: colors.yellow,
+        //     actions: this.actions
+        //   }
+        // });
       }
-
-      // const daysInMonth = moment(this.viewDate.getFullYear() + '-' + this.viewDate.getMonth(), 'YYYY-MM').daysInMonth();
-      // console.log(daysInMonth);
-      // new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDay(), 0, 0, 0),
-      // new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDay(), 23, 59, 59))
-
     });
   }
 
-  constructor(private modal: NgbModal, private miniCalendarService: MiniCalendarService, private missionService: MissionService) {
+  // beforeWeekViewRender(body, t): void {
+  //   let heb = new Hebcal;
+  //   let dayHoly: Observable<Array<CalendarEvent<{ event: Mission }>>>;
+  //   body.header.forEach(day => {
+  //     heb.setGdate(day.date.getDate(), day.date.getMonth() + 1, day.date.getFullYear());      
+  //     if (heb.getHolyday(heb, false) !== 0) {
+  //       dayHoly.subscribe(value => {
+  //         return {
+  //           start: new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate()),
+  //           end: new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate()),
+  //           title: heb.getHolydayName(heb.getHolyday(heb, false)),
+  //           color: colors.yellow,
+  //           actions: this.actions
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
+
+  constructor(private modal: NgbModal,
+    private miniCalendarService: MiniCalendarService,
+    private missionService: MissionService,
+    private missionTypeService: MissionTypesService,
+    private sidebarService: SidebarService) {
     // subscribe to home component messages
     this.subscription = this.miniCalendarService.getDate().subscribe((date) => {
       if (date.newDate != 'Invalid Date') {
         this.viewDate = date.newDate;
+        this.fetchEvents();
         this.refresh.next();
       }
     });
-    const daysInMonth = moment(this.viewDate.getFullYear() + '-' + this.viewDate.getMonth(), 'YYYY-MM').daysInMonth();
-    this.missionService.getMissionsByRange(
-      new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 0, 0, 0, 0),
-      new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), daysInMonth, 23, 59, 59))
-      .subscribe((data) => {
-        for (let e of data) {
-          // this.events$.push({
-          //   start: e.startDate,
-          //   end: e.endDate,
-          //   title: 'test',
-          //   color: colors.red,
-          //   actions: this.actions
-          // });
-          this.refresh.next();
-        }
-      });
+
+    this.sidebarSubscription = this.sidebarService.getfilter().subscribe((ids) => {
+      this.filterBy = ids;
+    });
+
     this.refresh.next();
   }
 
@@ -171,9 +198,15 @@ export class CalendarComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.fetchTypes();
     this.fetchEvents();
   }
 
+  fetchTypes(): void {
+    this.missionTypeService.getMissionTypes().subscribe((data) => {
+      this.types = data;
+    });
+  }
 
   fetchEvents(): void {
     const getStart: any = {
@@ -188,43 +221,32 @@ export class CalendarComponent implements OnDestroy, OnInit {
       day: endOfDay
     }[this.view];
 
-    const daysInMonth = moment(this.viewDate.getFullYear() + '-' + this.viewDate.getMonth(), 'YYYY-MM').daysInMonth();
     this.events$ = this.missionService.getMissionsByRange(
-      new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 0, 0, 0, 0),
-      new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), daysInMonth, 23, 59, 59))
-      .map(( results: Mission[] ) => {
+      new Date(format(getStart(this.viewDate))),
+      new Date(format(getEnd(this.viewDate))))
+      .map((results: Mission[]) => {
         return results.map((event: Mission) => {
+          let title = "";
+          for (let type of this.types) {
+            if (type._id === event.type) {
+              title = type.name;
+            }
+          }
           return {
-            title: "test",
-              start: new Date(event.startDate),
-              end: new Date(event.endDate),
-              color: colors.yellow,
-              meta: {
-                event
-              }
+            title: title,
+            start: new Date(event.startDate),
+            end: new Date(event.endDate),
+            color: colors.yellow,
+            meta: {
+              event
+            }
           };
         });
       });
-    // this.events$ = this.missionService.getMissionsByRange(
-    //   new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), 0, 0, 0, 0),
-    //   new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), daysInMonth, 23, 59, 59))
-    //   .subscribe(({ results }: { results: Mission[] }) => {
-    //     return results.map((mission: Mission) => {
-    //       return {
-    //         title: "test",
-    //         start: new Date(mission.startDate),
-    //         end: new Date(mission.endDate),
-    //         color: colors.yellow,
-    //         meta: {
-    //           mission
-    //         }
-    //       };
-    //     });
-    //   });
   }
 
 
-  dayClicked({ date, events }: { date: Date; events:  Array<CalendarEvent<{ mission: Mission }>> }): void {
+  dayClicked({ date, events }: { date: Date; events: Array<CalendarEvent<{ mission: Mission }>> }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
