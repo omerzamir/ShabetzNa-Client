@@ -131,6 +131,7 @@ export class CalendarComponent implements OnDestroy, OnInit {
     body.forEach(day => {
       heb.setGdate(day.date.getDate(), day.date.getMonth() + 1, day.date.getFullYear());
       if (heb.getHolyday(heb, false) !== 0) {
+        let d = day.events.map(res => res);
         day.events.push({
           start: new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate()),
           end: new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate()),
@@ -148,6 +149,12 @@ export class CalendarComponent implements OnDestroy, OnInit {
         //   }
         // });
       }
+    });
+        
+    this.sidebarSubscription = this.sidebarService.getfilter().subscribe((ids) => {
+      this.filterBy = ids.ids;
+      console.log("in")
+      this.refresh.next();      
     });
   }
 
@@ -183,17 +190,21 @@ export class CalendarComponent implements OnDestroy, OnInit {
         this.refresh.next();
       }
     });
-
+    // this.filterBy = ["59ca49d45cf38346ba22acd6"];
+    
     this.sidebarSubscription = this.sidebarService.getfilter().subscribe((ids) => {
-      this.filterBy = ids;
+      this.filterBy = ids.ids;
+      console.log("in")
+      this.refresh.next();      
     });
-
+    console.log(this.filterBy);
     this.refresh.next();
   }
 
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
     this.subscription.unsubscribe();
+    this.sidebarSubscription.unsubscribe();
     this.events$ = undefined;
   }
 

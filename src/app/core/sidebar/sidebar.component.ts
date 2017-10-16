@@ -43,9 +43,8 @@ export class SidebarComponent implements OnInit {
       });
     }
     else {
-      this.selectedTypesId.push(selected._id);      
+      this.selectedTypesId.push(selected._id); 
     }
-
     this.sidebarService.sendFilter(this.selectedTypesId);
   }
 }

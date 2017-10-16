@@ -4,13 +4,13 @@ import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class SidebarService {
-  private subject = new Subject<any>();
+    private subject = new Subject<any>();
 
-  sendFilter(ids: string[]) {
-      this.subject.next({ids: ids});
-  }
+    sendFilter(ids: string[]) {
+        this.subject.next({ ids: ids });
+    }
 
-  getfilter(): Observable<any> {
-      return this.subject.asObservable();
-  }
+    getfilter(): Observable<any> {
+        return this.subject.asObservable();
+    }
 }
