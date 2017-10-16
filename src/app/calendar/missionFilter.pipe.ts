@@ -24,8 +24,8 @@ export class Filter implements PipeTransform, OnDestroy {
         console.log(toFilter)
         if (!toFilter) return [];
 
-        this.subscription = this.sidebarService.getfilter().subscribe(ids => {
-            this.by = ids;
+        this.subscription = this.sidebarService.getfilter().subscribe((ids :any) => {
+            this.by = ids.idd;
             console.log(this.by);
             if (!this.by || this.by === []) return toFilter;
             let filtered = toFilter.filter(val => {
