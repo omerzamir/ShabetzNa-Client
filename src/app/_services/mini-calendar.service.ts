@@ -4,13 +4,13 @@ import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class MiniCalendarService {
-  private subject = new Subject<any>();
+    private subject = new Subject<any>();
 
-  changeDate(date: Date) {
-      this.subject.next({ newDate: date });
-  }
+    changeDate(date: Date) {
+        this.subject.next({ newDate: date });
+    }
 
-  getDate(): Observable<any> {
-      return this.subject.asObservable();
-  }
+    getDate(): Observable<any> {
+        return this.subject.asObservable();
+    }
 }

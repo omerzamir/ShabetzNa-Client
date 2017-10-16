@@ -125,7 +125,7 @@ export class CalendarComponent implements OnDestroy, OnInit {
   activeDayIsOpen: boolean = true;
   subscription: Subscription;
   sidebarSubscription: Subscription;
-  filterBy: string[] = [];
+  filterBy: string[];
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
     let heb = new Hebcal;
     body.forEach(day => {
@@ -151,11 +151,11 @@ export class CalendarComponent implements OnDestroy, OnInit {
       }
     });
         
-    this.sidebarSubscription = this.sidebarService.getfilter().subscribe((ids) => {
-      this.filterBy = ids.ids;
-      console.log("in")
-      this.refresh.next();      
-    });
+    // this.sidebarSubscription = this.sidebarService.getfilter().subscribe(ids => {
+    //   this.filterBy = ids.ids;
+    //   console.log("in")
+    //   this.refresh.next();      
+    // });
   }
 
   // beforeWeekViewRender(body, t): void {
@@ -192,12 +192,12 @@ export class CalendarComponent implements OnDestroy, OnInit {
     });
     // this.filterBy = ["59ca49d45cf38346ba22acd6"];
     
-    this.sidebarSubscription = this.sidebarService.getfilter().subscribe((ids) => {
-      this.filterBy = ids.ids;
-      console.log("in")
-      this.refresh.next();      
-    });
-    console.log(this.filterBy);
+    // this.sidebarSubscription = this.sidebarService.getfilter().subscribe(ids => {
+    //   this.filterBy = ids.ids;
+    //   console.log("in")
+    //   this.refresh.next();      
+    // });
+    // console.log(this.filterBy);
     this.refresh.next();
   }
 
