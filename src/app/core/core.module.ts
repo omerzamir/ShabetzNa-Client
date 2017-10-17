@@ -5,11 +5,14 @@ import { NavComponent } from './nav/nav.component';
 import { FooterComponent } from './footer/footer.component';
 import { MiniCalendarComponent } from './sidebar/mini-calendar/mini-calendar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { DialogsModule } from '../dialogs/dialogs.module';
+
 
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule
+    MaterialModule,
+    DialogsModule
   ],
   declarations: [
     NavComponent,
@@ -22,6 +25,6 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     FooterComponent,
     MiniCalendarComponent,
     SidebarComponent
-  ]
+  ],  
 })
 export class CoreModule { }

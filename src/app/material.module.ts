@@ -19,7 +19,9 @@ import {
   MdGridListModule,
   MdListModule,
   MdDatepickerModule,
-  MdProgressSpinnerModule} from '@angular/material';
+  MdProgressSpinnerModule,
+  MdRadioModule
+} from '@angular/material';
 
 
 @NgModule({
@@ -42,7 +44,8 @@ import {
     MdGridListModule,
     MdListModule,
     MdDatepickerModule,
-    MdProgressSpinnerModule
+    MdProgressSpinnerModule,
+    MdRadioModule
   ],
   exports: [
     MdNativeDateModule,
@@ -62,7 +65,8 @@ import {
     MdGridListModule,
     MdListModule,
     MdDatepickerModule,
-    MdProgressSpinnerModule
+    MdProgressSpinnerModule,
+    MdRadioModule
   ]
 })
 

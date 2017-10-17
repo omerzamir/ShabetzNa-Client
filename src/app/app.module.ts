@@ -1,12 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { CalendarModule } from 'angular-calendar';
 import { MiniCalendarService, SidebarService } from './_services/index';
 
+import { DialogsModule } from './dialogs/dialogs.module';
 import { CoreModule } from './core/core.module';
 import { MyCalendarModule } from './calendar/calendar.module';
 import { AppComponent } from './app.component';
@@ -14,17 +15,19 @@ import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     BrowserAnimationsModule,
     MaterialModule,
+    DialogsModule,    
     CoreModule,
     CalendarModule.forRoot(),
-    MyCalendarModule
+    MyCalendarModule,
   ],
   providers: [
     MiniCalendarService,
