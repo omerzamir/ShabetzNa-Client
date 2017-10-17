@@ -79,7 +79,6 @@ interface MissionType {
     },
     MissionService,
     MissionTypesService,
-    SidebarService,
     Filter
   ],
   encapsulation: ViewEncapsulation.Emulated
@@ -150,32 +149,7 @@ export class CalendarComponent implements OnDestroy, OnInit {
         // });
       }
     });
-        
-    // this.sidebarSubscription = this.sidebarService.getfilter().subscribe(ids => {
-    //   this.filterBy = ids.ids;
-    //   console.log("in")
-    //   this.refresh.next();      
-    // });
   }
-
-  // beforeWeekViewRender(body, t): void {
-  //   let heb = new Hebcal;
-  //   let dayHoly: Observable<Array<CalendarEvent<{ event: Mission }>>>;
-  //   body.header.forEach(day => {
-  //     heb.setGdate(day.date.getDate(), day.date.getMonth() + 1, day.date.getFullYear());      
-  //     if (heb.getHolyday(heb, false) !== 0) {
-  //       dayHoly.subscribe(value => {
-  //         return {
-  //           start: new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate()),
-  //           end: new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate()),
-  //           title: heb.getHolydayName(heb.getHolyday(heb, false)),
-  //           color: colors.yellow,
-  //           actions: this.actions
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
 
   constructor(private modal: NgbModal,
     private miniCalendarService: MiniCalendarService,
@@ -190,14 +164,13 @@ export class CalendarComponent implements OnDestroy, OnInit {
         this.refresh.next();
       }
     });
-    // this.filterBy = ["59ca49d45cf38346ba22acd6"];
     
-    // this.sidebarSubscription = this.sidebarService.getfilter().subscribe(ids => {
-    //   this.filterBy = ids.ids;
-    //   console.log("in")
-    //   this.refresh.next();      
-    // });
-    // console.log(this.filterBy);
+    this.sidebarSubscription = this.sidebarService.getfilter().subscribe(ids => {
+      this.filterBy = ids;
+      // fetch the events in order to filter all of them and not only the remaining.
+      this.fetchEvents();      
+      this.refresh.next();      
+    });
     this.refresh.next();
   }
 
@@ -292,7 +265,6 @@ export class CalendarComponent implements OnDestroy, OnInit {
   }
 
   addEvent(event): void {
-    // this.events$.push(event);
     this.refresh.next();
   }
 }

@@ -7,9 +7,7 @@ import { MissionTypesService, SidebarService } from '../../_services/index';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
   providers: [
-    MiniCalendarComponent,
     MissionTypesService,
-    SidebarService
   ]
 })
 export class SidebarComponent implements OnInit {
@@ -43,7 +41,7 @@ export class SidebarComponent implements OnInit {
       });
     }
     else {
-      this.selectedTypesId.push(selected._id); 
+      this.selectedTypesId.push(selected._id);
     }
     this.sidebarService.sendFilter(this.selectedTypesId);
   }

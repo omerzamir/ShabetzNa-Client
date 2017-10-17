@@ -20,26 +20,25 @@ export class Filter implements PipeTransform, OnDestroy {
         this.subscription.unsubscribe();
     }
 
-    transform(toFilter: any): any {
-        console.log(toFilter)
+    transform(toFilter: any, by: any): any {
+        // If there is nothing to filter return an empty array.
         if (!toFilter) return [];
 
-        this.subscription = this.sidebarService.getfilter().subscribe((ids :any) => {
-            this.by = ids.idd;
-            console.log(this.by);
-            if (!this.by || this.by === []) return toFilter;
-            let filtered = toFilter.filter(val => {
-                for (let comp of this.by) {
-                    if (val.meta.event.type == comp) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            return filtered;
-        });
-        // console.log(by);
+        // If there is no values to filter by return the array as you got it.
+        if (!by || by.length == 0) return toFilter;
 
-        return toFilter;
+        // For each value in the array to filter.
+        let filtered = toFilter.filter(val => {
+            // check if exist in the filterby array If not escaped false is returned.
+            for (let comp of by) {
+                // If the type of the event equals the filterby type currently checked.
+                if (val.meta.event.type == comp) {
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        return filtered;
     }
 }

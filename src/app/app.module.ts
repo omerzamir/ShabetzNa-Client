@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { CalendarModule } from 'angular-calendar';
-import { MiniCalendarService } from './_services/index';
+import { MiniCalendarService, SidebarService } from './_services/index';
 
 import { CoreModule } from './core/core.module';
 import { MyCalendarModule } from './calendar/calendar.module';
@@ -26,7 +26,10 @@ import { AppComponent } from './app.component';
     CalendarModule.forRoot(),
     MyCalendarModule
   ],
-  providers: [MiniCalendarService],
+  providers: [
+    MiniCalendarService,
+    SidebarService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

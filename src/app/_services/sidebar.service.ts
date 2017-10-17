@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class SidebarService {
-    private subject = new Subject<Array<string>>();
+    private subject = new ReplaySubject<Array<string>>();
 
     sendFilter(ids: string[]) {
         this.subject.next(ids);
