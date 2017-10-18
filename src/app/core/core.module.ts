@@ -7,7 +7,6 @@ import { MiniCalendarComponent } from './sidebar/mini-calendar/mini-calendar.com
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { DialogsModule } from '../dialogs/dialogs.module';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -25,6 +24,8 @@ import { DialogsModule } from '../dialogs/dialogs.module';
     FooterComponent,
     MiniCalendarComponent,
     SidebarComponent
-  ],  
+  ], 
+  providers: [
+  ] 
 })
 export class CoreModule { }

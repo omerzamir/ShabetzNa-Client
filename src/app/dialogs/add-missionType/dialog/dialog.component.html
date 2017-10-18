@@ -1,0 +1,28 @@
+<div dir="rtl">
+  <form class="addMissionTypeForm" #f="ngForm" (ngSubmit)="onSubmit(f)">
+    
+    <md-form-field class="full-width">
+      <input mdInput placeholder="שם תורנות" id="name" [(ngModel)]="name" name="name">
+    </md-form-field>
+
+    <md-form-field class="full-width">
+      <textarea mdInput placeholder="תיאור" id="description" [(ngModel)]="description" name="description">
+      </textarea>
+    </md-form-field>
+
+    <div>
+      <md-radio-group class="radio-group" [(ngModel)]="type" name="type">
+        <md-radio-button class="radio-button" [value]="0">
+          חובה
+        </md-radio-button>
+        <md-radio-button class="radio-button" [value]="1">
+          קבע
+        </md-radio-button>
+      </md-radio-group>
+    </div>
+
+    <button md-raised-button id="send" color="primary">שמור</button>
+    <button md-raised-button id="cancel" type="button" (click)="cancel()" color="warn">בטל</button>
+
+  </form>
+</div>

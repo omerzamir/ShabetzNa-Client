@@ -1,12 +1,14 @@
 <app-mini-calendar></app-mini-calendar>
 
-<span #types *ngFor="let typeOfMission of typesOfMission" dir="rtl">
-  <h3 md-subheader>{{ typeOfMission.text }}</h3>  
-    <md-selection-list >
-      <span *ngFor="let missionType of missionTypes" dir="ltr">
-          <md-list-option *ngIf="missionType.type == typeOfMission.code" dir="ltr" style="float:right;" (click)="onClick(missionType)" >
-            {{ missionType.name }}
-          </md-list-option>
-      </span>
+<span *ngIf="!rerender">
+  <span #types *ngFor="let typeOfMission of typesOfMission" dir="rtl">
+    <h3 md-subheader>{{ typeOfMission.text }}</h3>
+    <md-selection-list>
+      <div *ngFor="let missionType of missionTypes" dir="rtl">
+        <md-list-option *ngIf="missionType.type == typeOfMission.code" dir="ltr" style="float:right;width:100%" (click)="onClick(missionType)">
+          <span dir="rtl">{{ missionType.name }}</span>
+        </md-list-option>
+      </div>
     </md-selection-list>
+  </span>
 </span>

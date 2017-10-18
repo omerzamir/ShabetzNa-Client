@@ -13,4 +13,9 @@ export class MissionTypesService {
         return this.http.get(this.apiURL)
             .map((res: Response) => res.json());
     }
+
+    addMIssionType(body) {
+        return this.http.post(this.apiURL, body)
+            .subscribe();
+    }
 }
