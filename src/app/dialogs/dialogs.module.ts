@@ -19,8 +19,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     exports: [
         AddMissionTypeComponent,
     ], 
-    entryComponents: [DialogComponent,],  
-    providers: []
-    
+    entryComponents: [DialogComponent,],    
 })
 export class DialogsModule { }

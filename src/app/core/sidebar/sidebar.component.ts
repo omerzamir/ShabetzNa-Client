@@ -14,34 +14,26 @@ import { Subscription } from 'rxjs/Subscription';
 export class SidebarComponent implements OnInit, OnDestroy {
   typesOfMission;
   missionTypes;
-  rerender = false;
   selectedTypesId: string[];
   sidebarSubscription: Subscription;
-  
+
   ngOnDestroy(): void {
     this.sidebarSubscription.unsubscribe();
   }
-  
+
   constructor(private missionTypesService: MissionTypesService,
-    private sidebarService: SidebarService,
-    private cdRef: ChangeDetectorRef) {
+    private sidebarService: SidebarService
+  ) {
     this.selectedTypesId = [];
 
     this.sidebarSubscription = this.sidebarService.getRefresh().subscribe((d) => {
-      console.log("dfg")
-      this.rerender = true;
-      this.cdRef.detectChanges();
-      this.rerender = false;
+      this.missionTypes.push(d);
     });
 
   }
 
   ngOnInit(): void {
-    this.missionTypesService.getMissionTypes().subscribe((data) => {
-      this.missionTypes = data;
-    });
-
-
+    this.fetchTypes();  
 
     this.typesOfMission = [
       {
@@ -66,4 +58,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
     this.sidebarService.sendFilter(this.selectedTypesId);
   }
+
+  fetchTypes(): void {
+    this.missionTypesService.getMissionTypes().subscribe((data) => {
+      this.missionTypes = data;
+    });
+  }
+
 }

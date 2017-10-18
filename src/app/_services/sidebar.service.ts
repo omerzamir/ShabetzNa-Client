@@ -5,7 +5,7 @@ import { Subject } from 'rxjs/Subject';
 @Injectable()
 export class SidebarService {
     private subject = new Subject<Array<string>>();
-    private refreshSubject = new Subject<string>();
+    private refreshSubject = new Subject<{}>();
 
     sendFilter(ids: string[]) {
         this.subject.next(ids);
@@ -15,11 +15,11 @@ export class SidebarService {
         return this.subject.asObservable();
     }
 
-    refresh(): void {
-        this.refreshSubject.next("");
+    refresh(f: {}): void {
+        this.refreshSubject.next(f);
     }
 
-    getRefresh(): Observable<string> {
+    getRefresh(): Observable<{}> {
         return this.refreshSubject.asObservable();
     }
 }
