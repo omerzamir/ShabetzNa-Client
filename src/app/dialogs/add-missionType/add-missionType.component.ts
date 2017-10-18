@@ -13,7 +13,7 @@ export class AddMissionTypeComponent{
   constructor(private dialog: MdDialog) { }
   
     openDialog() {
-      let dialogRef = this.dialog.open(DialogComponent, { width: '250px' });
+      let dialogRef = this.dialog.open(DialogComponent, { width: '30%' });
   
       dialogRef.afterClosed().subscribe(result => {
   

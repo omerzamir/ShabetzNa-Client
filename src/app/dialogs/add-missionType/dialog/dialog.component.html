@@ -1,16 +1,20 @@
 <div dir="rtl">
+
+  <div style="margin-right:31.5%;font-weight: bolder">הוספת סוג משימה</div>
+  <br />
+  <br />
   <form class="addMissionTypeForm" #f="ngForm" (ngSubmit)="onSubmit(f)">
-    
+
     <md-form-field class="full-width">
-      <input mdInput placeholder="שם תורנות" id="name" [(ngModel)]="name" name="name">
+      <input mdInput placeholder="שם תורנות" id="name" [(ngModel)]="name" name="name" class="full-width">
     </md-form-field>
 
     <md-form-field class="full-width">
-      <textarea mdInput placeholder="תיאור" id="description" [(ngModel)]="description" name="description">
+      <textarea mdInput placeholder="תיאור" id="description" [(ngModel)]="description" name="description" class="full-width">
       </textarea>
     </md-form-field>
 
-    <div>
+    <div style="margin-top:5%">
       <md-radio-group class="radio-group" [(ngModel)]="type" name="type">
         <md-radio-button class="radio-button" [value]="0">
           חובה
@@ -21,8 +25,9 @@
       </md-radio-group>
     </div>
 
-    <button md-raised-button id="send" color="primary">שמור</button>
-    <button md-raised-button id="cancel" type="button" (click)="cancel()" color="warn">בטל</button>
-
+    <div style="float:left;margin-top:12%">
+      <button md-raised-button id="send">שמור</button>
+      <button md-raised-button id="cancel" type="button" (click)="cancel()">בטל</button>
+    </div>
   </form>
 </div>
