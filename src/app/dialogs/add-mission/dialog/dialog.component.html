@@ -1,0 +1,20 @@
+<div dir="rtl">
+
+  <div style="margin-right:31.5%;font-weight: bolder">הוספת תורנות</div>
+  <td-steps>
+    <td-step #step1 label="Basic Usage" sublabel="Toggle between active and inactive and emit events." [active]="true" [disabled]="disabled"
+      (activated)="activeStep1Event()" (deactivated)="deactiveStep1Event()">
+      
+      Include any content you like for an active stepper
+    </td-step>
+    <td-step #step2 label="Required State" sublabel="Toggle between active and inactive while in required state and disable ripple."
+      [state]="stateStep2" [disabled]="disabled" disableRipple>
+      This step is required!
+      
+    </td-step>
+    <td-step #step3 label="Complete State" sublabel="Toggle between active and inactive while in complete state." [state]="stateStep3"
+      [disabled]="disabled">
+      Mark this step complete and get a summary
+    </td-step>
+  </td-steps>
+</div>
