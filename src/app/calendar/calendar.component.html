@@ -19,16 +19,17 @@
   <div *ngIf="events$ | async as events" #cal style="width:100%">
     <div [ngSwitch]="view" style="width:100%">
       <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events | filterEvents : filterBy" [refresh]="refresh"
-        [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)"
+        (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)"
         (eventTimesChanged)="eventTimesChanged($event)" [locale]="locale" [weekStartsOn]="weekStartsOn" [weekendDays]="weekendDays"
         style="direction:rtl" (beforeViewRender)="beforeMonthViewRender($event)">
       </mwl-calendar-month-view>
-      <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events| filterEvents : filterBy" [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)" [locale]="locale" [weekStartsOn]="weekStartsOn" [weekendDays]="weekendDays"
-        style="direction:rtl">
+      <mwl-calendar-week-view *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events| filterEvents : filterBy" [refresh]="refresh"
+        (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)" [locale]="locale"
+        [weekStartsOn]="weekStartsOn" [weekendDays]="weekendDays" style="direction:rtl">
       </mwl-calendar-week-view>
-      <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events| filterEvents : filterBy" [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)" [locale]="locale" style="direction:rtl">
+      <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events| filterEvents : filterBy" [refresh]="refresh"
+        (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)" [locale]="locale"
+        style="direction:rtl">
       </mwl-calendar-day-view>
     </div>
   </div>

@@ -11,14 +11,16 @@ import { StepState } from '@covalent/core';
 })
 export class DialogComponent {
   type: Number;
-
+  
   constructor(public dialogRef: MdDialogRef<DialogComponent>,
     private misisonService: MissionService) { }
     activeDeactiveStep1Msg: string = 'No select/deselect detected yet';
-    stateStep2: StepState = StepState.Required;
-    stateStep3: StepState = StepState.Complete;
-    disabled: boolean = false;
-
+    stateStep1: StepState = StepState.None;
+    stateStep2: StepState = StepState.None;
+    stateStep3: StepState = StepState.None;
+    disabled: boolean = true;
+    date: String;
+    
   cancel(): void {
     this.dialogRef.close();
   }

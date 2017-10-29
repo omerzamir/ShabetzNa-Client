@@ -35,6 +35,7 @@ import { CustomDateFormatter } from './custom-date-formatter.provider';
 import * as Hebcal from 'libhdate';
 import * as moment from 'moment';
 import { Filter } from './missionFilter.pipe';
+import { AddMissionComponent } from '../dialogs/add-mission/add-mission.component'
 
 const colors: any = {
   red: {
@@ -79,7 +80,8 @@ interface MissionType {
     },
     MissionService,
     MissionTypesService,
-    Filter
+    Filter,
+    AddMissionComponent
   ],
   encapsulation: ViewEncapsulation.Emulated
 })
@@ -155,7 +157,8 @@ export class CalendarComponent implements OnDestroy, OnInit {
     private miniCalendarService: MiniCalendarService,
     private missionService: MissionService,
     private missionTypeService: MissionTypesService,
-    private sidebarService: SidebarService) {
+    private sidebarService: SidebarService,
+    private addMissionComponent: AddMissionComponent) {
     // subscribe to home component messages
     this.subscription = this.miniCalendarService.getDate().subscribe((date) => {
       if (date.newDate != 'Invalid Date') {
@@ -173,7 +176,7 @@ export class CalendarComponent implements OnDestroy, OnInit {
     });
     this.refresh.next();
   }
-
+  AddMissionComponent
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
     this.subscription.unsubscribe();
@@ -231,17 +234,19 @@ export class CalendarComponent implements OnDestroy, OnInit {
 
 
   dayClicked({ date, events }: { date: Date; events: Array<CalendarEvent<{ mission: Mission }>> }): void {
-    if (isSameMonth(date, this.viewDate)) {
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-        this.viewDate = date;
-      }
-    }
+    // if (isSameMonth(date, this.viewDate)) {
+    //   if (
+    //     (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+    //     events.length === 0
+    //   ) {
+    //     this.activeDayIsOpen = false;
+    //   } else {
+    //     this.activeDayIsOpen = true;
+    //     this.viewDate = date;
+    //   }
+    // }
+    this.addMissionComponent.openDialog(date);
+
   }
 
   public changeViewDate(date: Date): void {

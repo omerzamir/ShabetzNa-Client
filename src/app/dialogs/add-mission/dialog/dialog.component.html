@@ -2,14 +2,17 @@
 
   <div style="margin-right:31.5%;font-weight: bolder">הוספת תורנות</div>
 
-  <td-steps mode="'horizontal'">
-    <td-step #step1 label="Basic Usage" sublabel="" [active]="true" [disabled]="disabled" (activated)="activeStep1Event()" (deactivated)="deactiveStep1Event()">
-    </td-step>
-    <td-step #step2 label="Required State" sublabel="" [state]="stateStep2" [disabled]="disabled" disableRipple>
+  <td-steps [mode]="'horizontal'">
 
+    <td-step #step1 label="בחירת משימה" sublabel="" [active]="true" (activated)="activeStep1Event()" (deactivated)="deactiveStep1Event()">
     </td-step>
-    <td-step #step3 label="Complete State" sublabel="" [state]="stateStep3" [disabled]="disabled">
+
+    <td-step #step2 label="בחירת מאפיינים" sublabel="" [state]="stateStep2" [disabled]="disabled" disableRipple>
     </td-step>
+
+    <td-step #step3 label="שיוך חייל" sublabel="" [state]="stateStep3" [disabled]="disabled">
+    </td-step>
+
   </td-steps>
 
 </div>
