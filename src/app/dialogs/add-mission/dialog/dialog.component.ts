@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialogRef, MatRadioModule } from '@angular/material';
+import { MdDialogRef, MdRadioModule } from '@angular/material';
 import { NgForm } from '@angular/forms';
 import { MissionService} from '../../../_services/index';
 import { StepState, CovalentStepsModule } from '@covalent/core';
@@ -12,7 +12,7 @@ import { StepState, CovalentStepsModule } from '@covalent/core';
 export class DialogComponent {
   type: Number;
 
-  constructor(public dialogRef: MatDialogRef<DialogComponent>,
+  constructor(public dialogRef: MdDialogRef<DialogComponent>,
     private misisonService: MissionService) { }
     activeDeactiveStep1Msg: string = 'No select/deselect detected yet';
     stateStep2: StepState = StepState.Required;

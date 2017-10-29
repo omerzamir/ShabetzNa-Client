@@ -1,5 +1,5 @@
 import { Component} from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MdDialog, MdDialogRef } from '@angular/material';
 import { DialogComponent } from './dialog/dialog.component';
 
 
@@ -10,7 +10,7 @@ import { DialogComponent } from './dialog/dialog.component';
 })
 export class AddMissionComponent{
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MdDialog) { }
   
     openDialog() {
       let dialogRef = this.dialog.open(DialogComponent, { width: '30%' });

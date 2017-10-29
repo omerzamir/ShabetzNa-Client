@@ -23,6 +23,7 @@
     "@angular/platform-browser": "^4.2.4",
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/router": "^4.2.4",
+    "@covalent/core": "1.0.0-beta.7",
     "@material2-extra/calendar": "0.1.1",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-beta.5",
     "angular-calendar": "0.21.2",
