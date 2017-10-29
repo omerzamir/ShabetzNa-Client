@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MdDialogRef, MdRadioModule } from '@angular/material';
 import { NgForm } from '@angular/forms';
 import { MissionService} from '../../../_services/index';
-import { StepState, CovalentStepsModule } from '@covalent/core';
+import { StepState } from '@covalent/core';
 
 @Component({
   templateUrl: './dialog.component.html',
