@@ -1,18 +1,67 @@
 <div dir="rtl">
 
-  <div style="margin-right:31.5%;font-weight: bolder">הוספת תורנות</div>
+  <div style="font-weight: bolder;margin-right: 43%;">הוספת תורנות</div>
+  <form class="addMissionForm" #f="ngForm" (ngSubmit)="onSubmit(f)">
 
-  <td-steps [mode]="'horizontal'">
+    <td-steps [mode]="'horizontal'" md-dialog-content>
 
-    <td-step #step1 label="בחירת משימה" sublabel="" [active]="true" (activated)="activeStep1Event()" (deactivated)="deactiveStep1Event()">
-    </td-step>
+      <td-step #step1 [active]="true" (activated)="activeStep0Event()" [state]="stateStep1" (deactivated)="deactiveStep0Event()"
+        [active]="activeStep == 0">
+        <ng-template td-step-label>
+          <span>בחירת משימה</span>
+        </ng-template>
+        <ng-template td-step-actions style="height:100%;">
+          <div layout="column">
+            <div style="margin-top:5%">
+              <md-radio-group class="radio-group" [(ngModel)]="type" name="type">
+                <md-radio-button class="radio-button" [value]="0">
+                  חובה
+                </md-radio-button>
+                <md-radio-button class="radio-button" [value]="1">
+                  קבע
+                </md-radio-button>
+              </md-radio-group>
+            </div>
+            <div style="margin-top:5%;">
+              <md-select floatPlaceholder="never" placeholder="בחר משימה" [(ngModel)]="selectedMission" name="selectedMission">
+                <span *ngFor="let option of options">
+                  <md-option *ngIf="option.type == type" value="{{option._id}}">{{option.name}}</md-option>
+                </span>
+              </md-select>
+            </div>
+          </div>
+        </ng-template>
 
-    <td-step #step2 label="בחירת מאפיינים" sublabel="" [state]="stateStep2" [disabled]="disabled" disableRipple>
-    </td-step>
+      </td-step>
 
-    <td-step #step3 label="שיוך חייל" sublabel="" [state]="stateStep3" [disabled]="disabled">
-    </td-step>
+      <td-step #step2 label="בחירת מאפיינים" sublabel="" [state]="stateStep2" [active]="activeStep == 1" [class.no-pointer-events]="activeStep === 1"
+        (activated)="activeStep1Event()" (deactivated)="deactiveStep1Event()">
+        <div>
+          <md-form-field>
+            <input mdInput [mdDatepicker]="startpicker" placeholder="תאריך התחלה" disabled [(ngModel)]="startDate" name="startDate">
+            <md-datepicker-toggle mdSuffix [for]="startpicker"></md-datepicker-toggle>
+            <md-datepicker #startpicker></md-datepicker>
+          </md-form-field>
+        </div>
+        <div>
+          <md-form-field>
+            <input mdInput [mdDatepicker]="endpicker" placeholder="תאריך סיום" [(ngModel)]="endDate" name="endDate">
+            <md-datepicker-toggle mdSuffix [for]="endpicker"></md-datepicker-toggle>
+            <md-datepicker #endpicker></md-datepicker>
+          </md-form-field>
+        </div>
+      </td-step>
 
-  </td-steps>
+      <td-step #step3 label="שיוך חייל" sublabel="" [state]="stateStep3" [active]="activeStep == 2" [class.no-pointer-events]="activeStep === 2"
+        (activated)="activeStep2Event()" (deactivated)="deactiveStep2Event()">
+      </td-step>
+
+    </td-steps>
+    <div md-dialog-actions layout="row" layout-align="end end">
+      <button md-button color="primary" *ngIf="activeStep < 2" type="button" (click)="nextStep()" id="next">המשך</button>
+      <button md-button color="primary" id="send">שמור</button>
+      <button md-button color="primary" type="button" (click)="dialogRef.close()" id="cancel">בטל</button>
+    </div>
+  </form>
 
 </div>

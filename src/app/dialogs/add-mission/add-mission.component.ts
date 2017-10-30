@@ -14,7 +14,7 @@ export class AddMissionComponent {
 
   public openDialog(date: Date) {
     let dialogRef = this.dialog.open(DialogComponent, { width: '50%' });
-    dialogRef.componentInstance.date = date.toDateString();
+    dialogRef.componentInstance.startDateStr = date.toDateString();
 
     dialogRef.afterClosed().subscribe(result => {
 

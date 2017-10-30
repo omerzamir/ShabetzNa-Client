@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../material.module';
+import { MdDatepicker, MdCalendar } from '@angular/material';
 import { CovalentStepsModule } from '@covalent/core';
 import { AddMissionTypeComponent } from './add-missionType/add-missionType.component';
 import { AddMissionComponent } from './add-mission/add-mission.component';
@@ -14,7 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         MaterialModule,
         FormsModule,
         ReactiveFormsModule,
-        CovalentStepsModule
+        CovalentStepsModule,
     ],
     declarations: [
         AddMissionTypeComponent,
