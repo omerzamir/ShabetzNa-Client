@@ -50,6 +50,11 @@
             <md-datepicker #endpicker></md-datepicker>
           </md-form-field>
         </div>
+
+        <div>
+            <button md-raised-button color="warn" (click)="sendToAddSoldier()">שייך חייל</button>            
+        </div>
+
       </td-step>
 
       <td-step #step3 label="שיוך חייל" sublabel="" [state]="stateStep3" [active]="activeStep == 2" [class.no-pointer-events]="activeStep === 2"

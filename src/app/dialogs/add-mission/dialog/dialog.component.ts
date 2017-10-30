@@ -15,6 +15,8 @@ export class DialogComponent {
   selectedMission: String;
   startDateStr: string;
   startDate: Date;
+  endDate: Date;
+  soldiers: Array<string> = [];
   constructor(public dialogRef: MdDialogRef<DialogComponent>,
     private misisonService: MissionService, private cdRef: ChangeDetectorRef, private missionTypesService: MissionTypesService) {
 
@@ -48,6 +50,7 @@ export class DialogComponent {
 
   activeStep2Event(): void {
     this.activeStep = 2;
+    this.stateStep3 = StepState.None;
   }
 
   activeStep0Event(): void {
@@ -62,13 +65,22 @@ export class DialogComponent {
     }
   }
   deactiveStep1Event(): void {
-    // debugger;
+    if(this.startDate && this.endDate != undefined && this.soldiers.length != 0) {
+      this.stateStep2 = StepState.Complete;
+    } else { 
+      this.stateStep2 = StepState.Required;
+    }
   }
   deactiveStep2Event(): void {
-    // debugger;
+    this.stateStep3 = StepState.Complete;
   }
   nextStep() {
     this.activeStep++;
+    this.cdRef.detectChanges();
+  }
+
+  sendToAddSoldier() {
+    this.activeStep = 2;
     this.cdRef.detectChanges();
   }
 }
