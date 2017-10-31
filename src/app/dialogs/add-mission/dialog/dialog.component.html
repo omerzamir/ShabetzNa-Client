@@ -60,11 +60,13 @@
       <td-step #step3 label="שיוך חייל" sublabel="" [state]="stateStep3" [active]="activeStep == 2" [class.no-pointer-events]="activeStep === 2"
         (activated)="activeStep2Event()" (deactivated)="deactiveStep2Event()">
       
-        <!-- <mat-autocomplete>
-            <mat-option *ngFor="let option of options" [value]="option">
-               {{ option }}
-            </mat-option>
-         </mat-autocomplete> -->
+        <input mdInput placeholder="חפש משתמש" aria-label="חפש משתמש" [mdAutocomplete]="auto"
+        [formControl]="userSearch" (keyup)="filteredUsers = filterUsers(userSearch.value)">
+        <md-autocomplete #auto="mdAutocomplete">
+            <md-option *ngFor="let user of filteredUsers" [value]="user._id">
+               {{ user.hierarchy.join('/') }}
+            </md-option>
+         </md-autocomplete>
 
       </td-step>
 

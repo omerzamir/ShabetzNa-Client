@@ -1,13 +1,14 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { MdDialogRef, MdRadioModule } from '@angular/material';
-import { NgForm } from '@angular/forms';
-import { MissionService, MissionTypesService } from '../../../_services/index';
+import { NgForm, FormControl } from '@angular/forms';
+import { MissionService, MissionTypesService, UserService } from '../../../_services/index';
 import { StepState } from '@covalent/core';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.css'],
-  providers: [MissionService, MissionTypesService]
+  providers: [MissionService, MissionTypesService, UserService]
 })
 export class DialogComponent {
   type: Number = 3;
@@ -17,13 +18,23 @@ export class DialogComponent {
   startDate: Date;
   endDate: Date;
   soldiers: Array<string> = [];
+  users: any;
+  filteredUsers: any;
+  userSearch: FormControl;
+
   constructor(public dialogRef: MdDialogRef<DialogComponent>,
-    private misisonService: MissionService, private cdRef: ChangeDetectorRef, private missionTypesService: MissionTypesService) {
+    private misisonService: MissionService,
+    private cdRef: ChangeDetectorRef,
+    private missionTypesService: MissionTypesService,
+    private userService: UserService) {
+
 
     this.missionTypesService.getMissionTypes().subscribe((data) => {
       this.options = data;
     });
-
+    this.userSearch = new FormControl;
+    this.users = this.userService.getAllUsers();
+    this.filteredUsers = this.users;
   }
   stateStep1: StepState = StepState.None;
   stateStep2: StepState = StepState.None;
@@ -58,16 +69,16 @@ export class DialogComponent {
   }
 
   deactiveStep0Event(): void {
-    if(this.selectedMission) {
+    if (this.selectedMission) {
       this.stateStep1 = StepState.Complete;
-    } else { 
+    } else {
       this.stateStep1 = StepState.Required;
     }
   }
   deactiveStep1Event(): void {
-    if(this.startDate && this.endDate != undefined && this.soldiers.length != 0) {
+    if (this.startDate && this.endDate != undefined && this.soldiers.length != 0) {
       this.stateStep2 = StepState.Complete;
-    } else { 
+    } else {
       this.stateStep2 = StepState.Required;
     }
   }
@@ -83,4 +94,14 @@ export class DialogComponent {
     this.activeStep = 2;
     this.cdRef.detectChanges();
   }
+
+  filterUsers(val: string) {
+    debugger;    
+      if (val) {
+        const filterValue = val.toLowerCase();
+        return this.users.filter(user => user.hierarchy.join('/').toLowerCase().includes(filterValue));
+      }
+      return this.users;
+  }
+
 }
