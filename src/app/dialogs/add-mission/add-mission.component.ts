@@ -13,7 +13,7 @@ export class AddMissionComponent {
   constructor(private dialog: MdDialog) { }
 
   public openDialog(date: Date) {
-    let dialogRef = this.dialog.open(DialogComponent, { width: '50%' });
+    let dialogRef = this.dialog.open(DialogComponent, { width: '50%'});
     dialogRef.componentInstance.startDateStr = date.toDateString();
 
     dialogRef.afterClosed().subscribe(result => {

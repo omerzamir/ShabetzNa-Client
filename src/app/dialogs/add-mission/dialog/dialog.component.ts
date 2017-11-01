@@ -1,14 +1,13 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { MdDialogRef, MdRadioModule } from '@angular/material';
+import { MdDialogRef, MdRadioModule, DateAdapter } from '@angular/material';
 import { NgForm, FormControl } from '@angular/forms';
-import { MissionService, MissionTypesService, UserService } from '../../../_services/index';
+import { MissionService, MissionTypesService, UserService, MiniCalendarService } from '../../../_services/index';
 import { StepState } from '@covalent/core';
 import { Observable } from 'rxjs/Observable';
-
 @Component({
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.css'],
-  providers: [MissionService, MissionTypesService, UserService]
+  providers: [MissionService, MissionTypesService, UserService,]
 })
 export class DialogComponent {
   type: Number = 3;
@@ -17,7 +16,7 @@ export class DialogComponent {
   startDateStr: string;
   startDate: Date;
   endDate: Date;
-  soldiers: Array<string> = [];
+  soldiers: Array<any> = [];
   users: any;
   filteredUsers: any;
   userSearch: FormControl;
@@ -26,8 +25,10 @@ export class DialogComponent {
     private misisonService: MissionService,
     private cdRef: ChangeDetectorRef,
     private missionTypesService: MissionTypesService,
-    private userService: UserService) {
-
+    private userService: UserService,
+    dateAdapter: DateAdapter<Date>,
+    private miniCalendarService: MiniCalendarService) {
+    dateAdapter.setLocale('he');
 
     this.missionTypesService.getMissionTypes().subscribe((data) => {
       this.options = data;
@@ -48,15 +49,26 @@ export class DialogComponent {
   }
 
   onSubmit(f: NgForm): void {
-    // this.misisonService.addMIssionType(f.value);
-    // this.sidebarService.refresh(f.value);
-    console.log(f.value);
+    this.misisonService.addMission({
+      'type': this.selectedMission,
+      'startDate': this.startDate,
+      'endDate': this.endDate,
+      'participents': this.soldiers.map(val => val.userName)
+    }).subscribe(val => {
+      this.miniCalendarService.changeDate(new Date(val.startDate));
+    });
     this.dialogRef.close();
   }
 
   activeStep1Event(): void {
     this.activeStep = 1;
     this.startDate = new Date(this.startDateStr);
+    
+    if (this.startDate && this.endDate != undefined && this.soldiers.length != 0) {
+      this.stateStep2 = StepState.Complete;
+    } else {
+      this.stateStep2 = StepState.Required;
+    }
   }
 
   activeStep2Event(): void {
@@ -96,12 +108,21 @@ export class DialogComponent {
   }
 
   filterUsers(val: string) {
-    debugger;    
-      if (val) {
-        const filterValue = val.toLowerCase();
-        return this.users.filter(user => user.hierarchy.join('/').toLowerCase().includes(filterValue));
-      }
-      return this.users;
+    if (val) {
+      const filterValue = val.toLowerCase();
+      return this.users.filter(user => user.hierarchy.join('/').toLowerCase().includes(filterValue));
+    }
+    return this.users;
   }
 
+  addSoldier() {
+    const soldier = this.users.find(val => val.userName == this.userSearch.value);
+    this.soldiers.push(soldier);
+    this.activeStep = 1;
+    this.cdRef.detectChanges();
+  }
+
+  remove(soldier) {
+    this.soldiers = this.soldiers.filter(val => val.userName != soldier.userName);
+  }
 }

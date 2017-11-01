@@ -1,0 +1,25 @@
+<md-icon svgIcon="clear" (click)="close()"></md-icon>
+<div dir="rtl">
+  <h1>{{data.event.title}}</h1>
+
+  <h3>תאריך התחלה:</h3> {{data.event.start | date:'dd/M/yyyy'}}
+  <h3>תאריך סיום:</h3> {{data.event.end | date:'dd/M/yyyy'}}
+  <span *ngIf="data.event.meta">
+    <span *ngFor="let type of types">
+      <div *ngIf="type._id == data.event.meta.event.type">
+        <h3>תיאור:</h3>{{type.description}}
+      </div>
+    </span>
+
+    <div>
+      <h3>אנשים המשובצים לשמירה:</h3>
+      <div *ngFor="let user of data.event.meta.event.participents">
+        <span *ngFor="let userToComp of users">
+          <div *ngIf="user == userToComp._id">
+            {{ userToComp.firstName + ' ' + userToComp.lastName }}</div>
+        </span>
+      </div>
+    </div>
+  </span>
+
+</div>

@@ -52,28 +52,39 @@
         </div>
 
         <div>
-            <button md-raised-button color="warn" (click)="sendToAddSoldier()">שייך חייל</button>            
+          <button md-raised-button color="warn" (click)="sendToAddSoldier()">שייך חייל</button>
         </div>
+
+        <md-chip-list class="mat-chip-list-stacked">
+            <md-chip *ngFor="let soldier of soldiers"
+                selected="true"
+                color="primary">
+              {{soldier.firstName + " " + soldier.lastName}}
+              <md-icon mdChipRemove (click)="remove(soldier)">cancel</md-icon>
+            </md-chip>
+          </md-chip-list>
 
       </td-step>
 
       <td-step #step3 label="שיוך חייל" sublabel="" [state]="stateStep3" [active]="activeStep == 2" [class.no-pointer-events]="activeStep === 2"
         (activated)="activeStep2Event()" (deactivated)="deactiveStep2Event()">
-      
-        <input mdInput placeholder="חפש משתמש" aria-label="חפש משתמש" [mdAutocomplete]="auto"
-        [formControl]="userSearch" (keyup)="filteredUsers = filterUsers(userSearch.value)">
-        <md-autocomplete #auto="mdAutocomplete">
-            <md-option *ngFor="let user of filteredUsers" [value]="user._id">
-               {{ user.hierarchy.join('/') }}
+        <md-form-field>
+          <input mdInput placeholder="חפש חייל" [mdAutocomplete]="auto" [formControl]="userSearch" (keyup)="filteredUsers = filterUsers(userSearch.value)">
+          <md-autocomplete #auto="mdAutocomplete">
+            <md-option *ngFor="let user of filteredUsers" [value]="user.userName">
+              {{ user.hierarchy.join('/') }}
             </md-option>
-         </md-autocomplete>
-
+          </md-autocomplete>
+        </md-form-field>
+        <div>
+          <button md-raised-button color="primary" (click)="addSoldier()">שייך חייל</button>
+        </div>
       </td-step>
 
     </td-steps>
     <div md-dialog-actions layout="row" layout-align="end end">
-      <button md-button color="primary" *ngIf="activeStep < 2" type="button" (click)="nextStep()" id="next">המשך</button>
-      <button md-button color="primary" id="send">שמור</button>
+      <button md-button color="primary" *ngIf="activeStep < 1" type="button" (click)="nextStep()" id="next">המשך</button>
+      <button md-button color="primary" id="send" disabled="true">שמור</button>
       <button md-button color="primary" type="button" (click)="dialogRef.close()" id="cancel">בטל</button>
     </div>
   </form>

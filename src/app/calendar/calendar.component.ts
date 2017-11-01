@@ -5,7 +5,8 @@ import {
   TemplateRef,
   OnDestroy,
   OnInit,
-  ViewEncapsulation
+  ViewEncapsulation,
+  Inject
 } from '@angular/core';
 import {
   isSameMonth,
@@ -30,12 +31,48 @@ import {
 } from 'angular-calendar';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
-import { MiniCalendarService, MissionService, MissionTypesService, SidebarService } from '../_services/index';
+import { MiniCalendarService, MissionService, MissionTypesService, SidebarService, UserService } from '../_services/index';
 import { CustomDateFormatter } from './custom-date-formatter.provider';
 import * as Hebcal from 'libhdate';
 import * as moment from 'moment';
 import { Filter } from './missionFilter.pipe';
 import { AddMissionComponent } from '../dialogs/add-mission/add-mission.component'
+import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdIconModule, MdIconRegistry  } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
+
+@Component({
+  selector: 'description-dialog',
+  templateUrl: 'description-dialog.html',
+  providers:
+  [
+    MissionTypesService,
+    UserService,
+    MdIconRegistry
+  ],
+})
+export class DescriptionDialog {
+  types: any;
+  users: any;
+  constructor(
+    public dialogRef: MdDialogRef<DescriptionDialog>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    missionTypesService: MissionTypesService,
+    userService: UserService,
+    mdIconRegistry: MdIconRegistry,
+    sanitizer: DomSanitizer) {
+    missionTypesService.getMissionTypes().subscribe(vals => {
+      this.types = vals;
+    });
+
+    this.users = userService.getAllUsers();
+    mdIconRegistry.addSvgIcon('clear', sanitizer.bypassSecurityTrustResourceUrl('assets/exit.svg'));
+  }
+
+  close(): void {
+    this.dialogRef.close();
+  }
+
+}
 
 const colors: any = {
   red: {
@@ -83,7 +120,7 @@ interface MissionType {
     Filter,
     AddMissionComponent
   ],
-  encapsulation: ViewEncapsulation.Emulated
+  encapsulation: ViewEncapsulation.Emulated,
 })
 export class CalendarComponent implements OnDestroy, OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
@@ -158,7 +195,8 @@ export class CalendarComponent implements OnDestroy, OnInit {
     private missionService: MissionService,
     private missionTypeService: MissionTypesService,
     private sidebarService: SidebarService,
-    private addMissionComponent: AddMissionComponent) {
+    private addMissionComponent: AddMissionComponent,
+    public description: MdDialog) {
     // subscribe to home component messages
     this.subscription = this.miniCalendarService.getDate().subscribe((date) => {
       if (date.newDate != 'Invalid Date') {
@@ -167,16 +205,15 @@ export class CalendarComponent implements OnDestroy, OnInit {
         this.refresh.next();
       }
     });
-    
+
     this.sidebarSubscription = this.sidebarService.getfilter().subscribe(ids => {
       this.filterBy = ids;
       // fetch the events in order to filter all of them and not only the remaining.
-      this.fetchEvents();      
-      this.refresh.next();      
+      this.fetchEvents();
+      this.refresh.next();
     });
     this.refresh.next();
   }
-  AddMissionComponent
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
     this.subscription.unsubscribe();
@@ -265,11 +302,21 @@ export class CalendarComponent implements OnDestroy, OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent<{ mission: Mission }>): void {
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+    // this.modalData = { event, action };
+    // this.modal.open(this.modalContent, { size: 'lg' });
+
+    let dialogRef = this.description.open(DescriptionDialog, {
+      width: '40%',
+      data: { event: event }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
 
   addEvent(event): void {
     this.refresh.next();
   }
 }
+
+

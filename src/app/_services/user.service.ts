@@ -11,7 +11,8 @@ export class UserService {
 
     getAllUsers(){
         return [{
-            "_id":"Omer",
+            "_id":"59d09ee280291065889daf49",
+            "userName": "Omer",
             "firstName": "עומר",
             "lastName": "זמיר",
             "job": "מפתח",
@@ -19,7 +20,8 @@ export class UserService {
             "directGroup":"59gf8hjk158869423654d5a"
         },
         {
-            "_id":"Omer",
+            "_id":"59d09ee280291065989daf49",
+            "userName": "Omer",
             "firstName": "ggg",
             "lastName": "זמgggיר",
             "job": "מפתח",

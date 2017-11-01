@@ -23,4 +23,15 @@ export class MissionService {
         return this.http.post(this.apiURL + 'range', {'from': from, 'to': to})
             .map((res: Response) => res.json());
     }
+
+    addMission(mission) {
+        return this.http.post(this.apiURL, {
+            'type': mission.type,
+            'startDate': mission.startDate,
+            'endDate': mission.endDate,
+            'status': 0,
+            'participents': mission.participents
+        })
+        .map((res: Response) => res.json());
+    }
 }
