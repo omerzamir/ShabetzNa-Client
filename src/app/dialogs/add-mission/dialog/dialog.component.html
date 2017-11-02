@@ -13,7 +13,8 @@
         <ng-template td-step-actions style="height:100%;">
           <div layout="column">
             <div style="margin-top:5%">
-              <md-radio-group class="radio-group" [(ngModel)]="type" name="type">
+              <h3>בחר סוג</h3>
+              <md-radio-group class="radio-group" [(ngModel)]="type" name="type" required>
                 <md-radio-button class="radio-button" [value]="0">
                   חובה
                 </md-radio-button>
@@ -23,11 +24,13 @@
               </md-radio-group>
             </div>
             <div style="margin-top:5%;">
-              <md-select floatPlaceholder="never" placeholder="בחר משימה" [(ngModel)]="selectedMission" name="selectedMission">
+              <md-select floatPlaceholder="never" placeholder="בחר משימה" [(ngModel)]="selectedMission" name="selectedMission" required>
                 <span *ngFor="let option of options">
                   <md-option *ngIf="option.type == type" value="{{option._id}}">{{option.name}}</md-option>
                 </span>
               </md-select>
+              <md-error *ngIf="show1">סמן סוג ובחר משימה</md-error>
+
             </div>
           </div>
         </ng-template>
@@ -35,7 +38,7 @@
       </td-step>
 
       <td-step #step2 label="בחירת מאפיינים" sublabel="" [state]="stateStep2" [active]="activeStep == 1" [class.no-pointer-events]="activeStep === 1"
-        (activated)="activeStep1Event()" (deactivated)="deactiveStep1Event()">
+        (activated)="activeStep1Event()" (deactivated)="deactiveStep1Event()" [disabled]="toDisableFirst()">
         <div>
           <md-form-field>
             <input mdInput [mdDatepicker]="startpicker" placeholder="תאריך התחלה" disabled [(ngModel)]="startDate" name="startDate">
@@ -48,26 +51,26 @@
             <input mdInput [mdDatepicker]="endpicker" placeholder="תאריך סיום" [(ngModel)]="endDate" name="endDate">
             <md-datepicker-toggle mdSuffix [for]="endpicker"></md-datepicker-toggle>
             <md-datepicker #endpicker></md-datepicker>
+            <md-error *ngIf="show2 || (show2 && endDate)">בחר תאריך סיום</md-error>
           </md-form-field>
         </div>
 
         <div>
-          <button md-raised-button color="warn" (click)="sendToAddSoldier()">שייך חייל</button>
+          <button md-raised-button color="warn" (click)="sendToAddSoldier()" [disabled]="toDisableSecond()">שייך חייל</button>
+          <md-error *ngIf="show2">שייך חייל</md-error>
         </div>
 
         <md-chip-list class="mat-chip-list-stacked">
-            <md-chip *ngFor="let soldier of soldiers"
-                selected="true"
-                color="primary">
-              {{soldier.firstName + " " + soldier.lastName}}
-              <md-icon mdChipRemove (click)="remove(soldier)">cancel</md-icon>
-            </md-chip>
-          </md-chip-list>
+          <md-chip *ngFor="let soldier of soldiers" selected="true" color="primary">
+            {{soldier.firstName + " " + soldier.lastName}}
+            <md-icon mdChipRemove (click)="remove(soldier)">cancel</md-icon>
+          </md-chip>
+        </md-chip-list>
 
       </td-step>
 
       <td-step #step3 label="שיוך חייל" sublabel="" [state]="stateStep3" [active]="activeStep == 2" [class.no-pointer-events]="activeStep === 2"
-        (activated)="activeStep2Event()" (deactivated)="deactiveStep2Event()">
+        (activated)="activeStep2Event()" (deactivated)="deactiveStep2Event()" [disabled]="toDisableSecond()">
         <md-form-field>
           <input mdInput placeholder="חפש חייל" [mdAutocomplete]="auto" [formControl]="userSearch" (keyup)="filteredUsers = filterUsers(userSearch.value)">
           <md-autocomplete #auto="mdAutocomplete">
@@ -77,14 +80,18 @@
           </md-autocomplete>
         </md-form-field>
         <div>
-          <button md-raised-button color="primary" (click)="addSoldier()">שייך חייל</button>
+          <button md-raised-button color="primary" (click)="addSoldier()" *ngIf="userSearch.value">שייך חייל</button>
+          <button md-raised-button color="primary" (click)="addSoldier()" *ngIf="!userSearch.value" disabled>שייך חייל</button>
+
         </div>
       </td-step>
 
     </td-steps>
     <div md-dialog-actions layout="row" layout-align="end end">
       <button md-button color="primary" *ngIf="activeStep < 1" type="button" (click)="nextStep()" id="next">המשך</button>
-      <button md-button color="primary" id="send" disabled="true">שמור</button>
+      <button md-button color="primary" class="send" *ngIf="selectedMission && startDate && endDate && soldiers.length > 0">שמור</button>
+      <button md-button color="primary" class="send" *ngIf="!selectedMission || !startDate || !endDate || soldiers.length <= 0"
+        disabled>שמור</button>
       <button md-button color="primary" type="button" (click)="dialogRef.close()" id="cancel">בטל</button>
     </div>
   </form>

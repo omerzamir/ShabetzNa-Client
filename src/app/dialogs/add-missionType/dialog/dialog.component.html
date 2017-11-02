@@ -6,12 +6,14 @@
   <form class="addMissionTypeForm" #f="ngForm" (ngSubmit)="onSubmit(f)">
 
     <md-form-field class="full-width">
-      <input mdInput placeholder="שם תורנות" id="name" [(ngModel)]="name" name="name" class="full-width">
+      <input mdInput placeholder="שם תורנות" id="name" [(ngModel)]="name" name="name" class="full-width" required>
+      <md-error *ngIf="(!name && send) || !name">מלא שם</md-error>
     </md-form-field>
 
     <md-form-field class="full-width">
-      <textarea mdInput placeholder="תיאור" id="description" [(ngModel)]="description" name="description" class="full-width">
+      <textarea mdInput placeholder="תיאור" id="description" [(ngModel)]="description" name="description" class="full-width" required>
       </textarea>
+      <md-error *ngIf="(!description && send) || !description">הכנס תיאור למשימה</md-error>
     </md-form-field>
 
     <div style="margin-top:5%">
@@ -23,6 +25,7 @@
           קבע
         </md-radio-button>
       </md-radio-group>
+      <md-error *ngIf="!type && send">בחר סוג</md-error>      
     </div>
 
     <div style="float:left;margin-top:12%">

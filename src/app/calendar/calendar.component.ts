@@ -37,7 +37,7 @@ import * as Hebcal from 'libhdate';
 import * as moment from 'moment';
 import { Filter } from './missionFilter.pipe';
 import { AddMissionComponent } from '../dialogs/add-mission/add-mission.component'
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdIconModule, MdIconRegistry  } from '@angular/material';
+import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdIconModule, MdIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -282,8 +282,11 @@ export class CalendarComponent implements OnDestroy, OnInit {
     //     this.viewDate = date;
     //   }
     // }
-    this.addMissionComponent.openDialog(date);
-
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    if (date >= today) {
+      this.addMissionComponent.openDialog(date);
+    }
   }
 
   public changeViewDate(date: Date): void {

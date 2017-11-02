@@ -10,7 +10,7 @@ import { MissionTypesService, SidebarService } from '../../../_services/index';
 })
 export class DialogComponent {
   type: Number;
-
+  send:boolean = false;
   constructor(public dialogRef: MdDialogRef<DialogComponent>,
     private misisonTypeService: MissionTypesService,
     private sidebarService: SidebarService) { }
@@ -20,8 +20,11 @@ export class DialogComponent {
   }
   
   onSubmit(f: NgForm): void {
-    this.misisonTypeService.addMIssionType(f.value);
-    this.sidebarService.refresh(f.value);
-    this.dialogRef.close();
+    this.send = true;
+    if(f.value.name && f.value.type && f.value.description) {
+      this.misisonTypeService.addMIssionType(f.value);
+      this.sidebarService.refresh(f.value);
+      this.dialogRef.close();
+    }
   }
 }

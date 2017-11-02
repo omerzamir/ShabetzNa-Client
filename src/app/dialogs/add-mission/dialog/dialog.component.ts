@@ -20,6 +20,8 @@ export class DialogComponent {
   users: any;
   filteredUsers: any;
   userSearch: FormControl;
+  show1: boolean = false;
+  show2: boolean = false;
 
   constructor(public dialogRef: MdDialogRef<DialogComponent>,
     private misisonService: MissionService,
@@ -41,7 +43,6 @@ export class DialogComponent {
   stateStep2: StepState = StepState.None;
   stateStep3: StepState = StepState.None;
   private activeStep: number = 0;
-  disabled: boolean = false;
   date: String;
 
   cancel(): void {
@@ -61,13 +62,18 @@ export class DialogComponent {
   }
 
   activeStep1Event(): void {
-    this.activeStep = 1;
-    this.startDate = new Date(this.startDateStr);
-    
-    if (this.startDate && this.endDate != undefined && this.soldiers.length != 0) {
-      this.stateStep2 = StepState.Complete;
+    if (this.selectedMission) {
+      this.activeStep = 1;
+      this.show1 = false;
+      this.startDate = new Date(this.startDateStr);
+
+      if (this.startDate && this.endDate != undefined && this.soldiers.length != 0) {
+        this.stateStep2 = StepState.Complete;
+      } else {
+        this.stateStep2 = StepState.Required;
+      }
     } else {
-      this.stateStep2 = StepState.Required;
+      this.show1 = true;
     }
   }
 
@@ -82,8 +88,10 @@ export class DialogComponent {
 
   deactiveStep0Event(): void {
     if (this.selectedMission) {
+      this.show1 = false;
       this.stateStep1 = StepState.Complete;
     } else {
+      this.show1 = true;
       this.stateStep1 = StepState.Required;
     }
   }
@@ -98,13 +106,23 @@ export class DialogComponent {
     this.stateStep3 = StepState.Complete;
   }
   nextStep() {
-    this.activeStep++;
-    this.cdRef.detectChanges();
+    if (this.selectedMission) {
+      this.activeStep++;
+      this.show1 = false;
+      this.cdRef.detectChanges();
+    } else {
+      this.show1 = true;
+    }
   }
 
   sendToAddSoldier() {
-    this.activeStep = 2;
-    this.cdRef.detectChanges();
+    if (this.selectedMission && this.endDate) {
+      this.activeStep = 2;
+      this.show2 = false;
+      this.cdRef.detectChanges();
+    } else {
+      this.show2 = true;
+    }
   }
 
   filterUsers(val: string) {
@@ -117,12 +135,41 @@ export class DialogComponent {
 
   addSoldier() {
     const soldier = this.users.find(val => val.userName == this.userSearch.value);
+    this.filteredUsers = this.filteredUsers.filter(val => val.userName != this.userSearch.value);
     this.soldiers.push(soldier);
     this.activeStep = 1;
     this.cdRef.detectChanges();
+    this.userSearch.setValue(undefined);
   }
 
   remove(soldier) {
-    this.soldiers = this.soldiers.filter(val => val.userName != soldier.userName);
+    let toPushBack = [];
+
+    // Remove the soldier from the chosens;
+    this.soldiers = this.soldiers.filter(val => {
+      if (val.userName != soldier.userName) {
+        toPushBack.push(val);
+        return true;
+      }
+      return false;
+    });
+
+    // Push it back to the searchable array.
+    toPushBack.forEach(val => {
+      this.filteredUsers.push(val);
+    });
+
+  }
+
+  toDisableFirst() {
+    if (this.selectedMission)
+      return false;
+    return true;
+  }
+
+  toDisableSecond() {
+    if (this.endDate && this.selectedMission)
+      return false;
+    return true;
   }
 }
