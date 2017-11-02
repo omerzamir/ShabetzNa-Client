@@ -3,7 +3,7 @@
 <span *ngIf="!rerender">
   <span #types *ngFor="let typeOfMission of typesOfMission" dir="rtl">
     <h3 md-subheader>{{ typeOfMission.text }}</h3>
-    <md-selection-list style="max-height:10px;" >
+    <md-selection-list style="max-height:10px;overflow-y: scroll; max-height:15vh" >
       <ng-container *ngFor="let missionType of missionTypes">
         <md-list-option *ngIf="missionType.type == typeOfMission.code" dir="ltr" style="float:right;width:100%" (click)="onClick(missionType)">
           <span dir="rtl">{{ missionType.name }}</span>

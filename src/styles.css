@@ -24,11 +24,13 @@ body {
   }
 
   .done2 {
-    position: sticky;
+    position: fixed;
+    margin-top:2%;
     bottom: 5px;
     right: 10px;
     left: 10px;
-    color: white;
+    color: #f5f5f5;
+    background-color: #f5f5f5;    
   }
 
   #nav {
