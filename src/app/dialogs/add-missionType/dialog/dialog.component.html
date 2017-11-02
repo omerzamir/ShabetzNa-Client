@@ -17,7 +17,7 @@
     </md-form-field>
 
     <div style="margin-top:5%">
-      <md-radio-group class="radio-group" [(ngModel)]="type" name="type">
+      <md-radio-group class="radio-group" [(ngModel)]="type" name="type" id="type">
         <md-radio-button class="radio-button" [value]="0">
           חובה
         </md-radio-button>
@@ -25,7 +25,7 @@
           קבע
         </md-radio-button>
       </md-radio-group>
-      <md-error *ngIf="!type && send">בחר סוג</md-error>      
+      <md-error *ngIf="type === undefined && send">בחר סוג</md-error>      
     </div>
 
     <div style="float:left;margin-top:12%">

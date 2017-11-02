@@ -24,7 +24,7 @@ body {
   }
 
   .done2 {
-    position: fixed;
+    position: sticky;
     bottom: 5px;
     right: 10px;
     left: 10px;

@@ -12,14 +12,16 @@ import { DialogsModule } from './dialogs/dialogs.module';
 import { CoreModule } from './core/core.module';
 import { MyCalendarModule } from './calendar/calendar.module';
 import { AppComponent } from './app.component';
+import { MainPageComponent } from './main-page/main-page.component';
 
 export const ROUTES: Routes = [
-  { path: '', component: AppComponent }
+  { path: '', component: MainPageComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
+    MainPageComponent,
   ],
   imports: [
     BrowserModule,

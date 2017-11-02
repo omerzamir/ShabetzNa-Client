@@ -21,7 +21,8 @@ export class DialogComponent {
   
   onSubmit(f: NgForm): void {
     this.send = true;
-    if(f.value.name && f.value.type && f.value.description) {
+    console.log(this.type, f.value.type);
+    if(f.value.name && (f.value.type != undefined && f.value.type != null) && f.value.description) {
       this.misisonTypeService.addMIssionType(f.value);
       this.sidebarService.refresh(f.value);
       this.dialogRef.close();
