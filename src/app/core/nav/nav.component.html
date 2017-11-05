@@ -1,12 +1,36 @@
 <md-toolbar dir="rtl" id="nav" color="primary">
-  <span><md-icon>mood</md-icon></span>
 
-  <span style="margin: auto">שבץ נא</span>
+
+  <span>
+    <md-icon>mood</md-icon>
+  </span>
+  <span class="fill-remaining-space"></span>  
+  <a href="/" style="float: right">שבץ נא</a>
+  <span class="fill-remaining-space"></span>
   <md-menu #menu="mdMenu">
-    <a href="/settings"><button md-menu-item > Settings </button></a>
-    <button md-menu-item> Help </button>
+    <a href="/settings">
+      <button md-menu-item> הגדרות </button>
+    </a>
   </md-menu>
-  <button md-icon-button [mdMenuTriggerFor]="menu">
-      <md-icon>more_vert</md-icon>
-   </button>
+  <span class="fill-remaining-space"></span>  
+  <form class="form">
+    <md-form-field class="full-width" *ngIf="show">
+      <div class="container-1">
+        <input mdInput placeholder="התחל לחפש" aria-label="התחל לחפש" [mdAutocomplete]="auto" id="search">
+      </div>
+
+      <md-autocomplete #auto="mdAutocomplete">
+        <md-option value="יעכ">
+        </md-option>
+      </md-autocomplete>
+    </md-form-field>
+  </form>
+  <button md-icon-button style="float:left;" (click)="toggle()">
+    <md-icon>search</md-icon>
+  </button>
+
+  <button md-icon-button [mdMenuTriggerFor]="menu" style="float:left;position:relative">
+    <md-icon>more_vert</md-icon>
+  </button>
+
 </md-toolbar>

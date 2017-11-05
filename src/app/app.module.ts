@@ -13,15 +13,18 @@ import { CoreModule } from './core/core.module';
 import { MyCalendarModule } from './calendar/calendar.module';
 import { AppComponent } from './app.component';
 import { MainPageComponent } from './main-page/main-page.component';
+import { SettingsPageComponent } from './settings-page/settings-page.component';
 
 export const ROUTES: Routes = [
-  { path: '', component: MainPageComponent }
+  { path: '', component: MainPageComponent },
+  { path: 'settings', component: SettingsPageComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     MainPageComponent,
+    SettingsPageComponent,
   ],
   imports: [
     BrowserModule,

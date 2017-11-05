@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MiniCalendarService } from '../../../_services/index';
-import { MdCalendar } from '@angular/material';
-
+import { MdCalendar, DateAdapter } from '@angular/material';
+// import * as moment from 'moment';
 @Component({
   selector: 'app-mini-calendar',
   moduleId: module.id,
@@ -10,7 +10,10 @@ import { MdCalendar } from '@angular/material';
 })
 export class MiniCalendarComponent implements OnInit {
 
-  constructor(private miniCalendarService: MiniCalendarService) { }
+  constructor(private miniCalendarService: MiniCalendarService,
+    dateAdapter: DateAdapter<Date>) {
+    // dateAdapter.setLocale('he');
+  }
 
   ngOnInit() {
   }
@@ -20,11 +23,13 @@ export class MiniCalendarComponent implements OnInit {
     if (event &&
       event.target &&
       event.target.offsetParent &&
-      event.target.offsetParent.attributes['aria-label'] &&
-      new Date(event.target.offsetParent.attributes['aria-label'].value) instanceof Date) {
+      event.target.offsetParent.attributes['aria-label']) {
 
-      const date: any = event.target.offsetParent.attributes['aria-label'].value;
-      this.miniCalendarService.changeDate(new Date(date));
+      // const date: any = moment(event.target.offsetParent.attributes['aria-label'].value, "DD YYYY MMMM").toString();
+      // console.log(date);
+      const date: string = event.target.offsetParent.attributes['aria-label'].value;
+      if (new Date(date).toDateString() !== "Invalid Date")
+        this.miniCalendarService.changeDate(new Date(date));
     }
   }
 }

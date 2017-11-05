@@ -1,46 +1,19 @@
-#wholeCalendar {
-    width: 10%;
-  }
-  
-  /* #content-left {
-    position: absolute;
-    left: 0;
-    padding-top: auto;
-    padding-bottom: auto;
-  }
-  
-  #content-right {
-    position: absolute;
-    right: 0;
-    padding-top: auto;
-    padding-bottom: auto;
-  }
-  
-  .content {
-    top: 10%;
-  } */
-  
-  #container {
-    position: relative;
-  }
-  
-  #container>* {
-    position: absolute;
-  }
-  
-  .left {
-    float: left;
-  }
-  
-  .right {
-    float: right;
-  }
-  
-  .top {
-    top: 0;
-  }
-  
-  .bottom {
-    bottom: 0;
-  }
-  
+.calendar {
+  width: 75%;
+  margin-top: 1.5%;
+  margin-right: 5%;
+  float: right;
+}
+
+.sidebar {
+  width: 10%;
+  margin-right: 2%;
+  float: right;
+}
+
+.done {
+  position: fixed;
+  bottom: 10%;
+  left: 3%;
+  color: white;
+}

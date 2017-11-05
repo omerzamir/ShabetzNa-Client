@@ -1,0 +1,32 @@
+<div dir="rtl">
+  <div>
+    <h1 class="header">הגדרות</h1>
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <div>
+        <label>הוסף הרשאה</label>
+      </div>
+      <md-form-field class="searchBar" floatPlaceholder="never">
+        <input mdInput placeholder="חפש חייל" [mdAutocomplete]="auto" [formControl]="userSearch" name="userSearch" (keyup)="filteredUsers = filterUsers(userSearch.value)">
+        <md-autocomplete #auto="mdAutocomplete">
+          <md-option *ngFor="let user of filteredUsers" [value]="user.userName">
+            {{ user.hierarchy.join('/') }}
+          </md-option>
+        </md-autocomplete>
+      </md-form-field>
+
+      <div>
+        <button md-button color="primary" class="send" *ngIf="userSearch.value">שמור</button>
+        <button md-button color="primary" class="send" *ngIf="!userSearch.value" disabled>שמור</button>
+      </div>
+
+    </form>
+  </div>
+  <div style="float:right;">
+    <md-chip-list class="md-chip-list-stacked">
+      <md-chip *ngFor="let soldier of soldiers" selected="true" color="primary">
+        {{soldier.firstName + " " + soldier.lastName}}
+        <md-icon mdChipRemove (click)="remove(soldier)">cancel</md-icon>
+      </md-chip>
+    </md-chip-list>
+  </div>
+</div>

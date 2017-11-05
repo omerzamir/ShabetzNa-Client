@@ -60,7 +60,7 @@
           <md-error *ngIf="show2">שייך חייל</md-error>
         </div>
 
-        <md-chip-list class="mat-chip-list-stacked">
+        <md-chip-list class="md-chip-list-stacked">
           <md-chip *ngFor="let soldier of soldiers" selected="true" color="primary">
             {{soldier.firstName + " " + soldier.lastName}}
             <md-icon mdChipRemove (click)="remove(soldier)">cancel</md-icon>
