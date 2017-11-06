@@ -60,7 +60,7 @@ a:visited {
   border: none;
   font-size: 10pt;
   float: right;
-  color: #ffffff;
+  color: #000000;
   padding-left: 45px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -68,18 +68,18 @@ a:visited {
 }
 
 .container-1 input#search::-webkit-input-placeholder {
-  color: #ffffff;
+  color: #000000;
 }
 
 .container-1 input#search:-moz-placeholder { /* Firefox 18- */
-  color: #ffffff;  
+  color: #000000;  
 }
 
 .container-1 input#search::-moz-placeholder {  /* Firefox 19+ */
-  color: #ffffff;  
+  color: #000000;  
 }
 
 .container-1 input#search:-ms-input-placeholder {  
-  color: #ffffff;  
+  color: #000000;  
 }
 

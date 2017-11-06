@@ -57,7 +57,7 @@
 
         <div>
           <button md-raised-button color="warn" (click)="sendToAddSoldier()" [disabled]="toDisableSecond()">שייך חייל</button>
-          <md-error *ngIf="show2">שייך חייל</md-error>
+          <md-error *ngIf="show2">{{ errorMsg}}</md-error>
         </div>
 
         <md-chip-list class="md-chip-list-stacked">

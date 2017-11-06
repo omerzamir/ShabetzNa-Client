@@ -22,7 +22,7 @@ export class DialogComponent {
   userSearch: FormControl;
   show1: boolean = false;
   show2: boolean = false;
-
+  errorMsg: string = "";
   constructor(public dialogRef: MdDialogRef<DialogComponent>,
     private misisonService: MissionService,
     private cdRef: ChangeDetectorRef,
@@ -50,15 +50,17 @@ export class DialogComponent {
   }
 
   onSubmit(f: NgForm): void {
-    this.misisonService.addMission({
-      'type': this.selectedMission,
-      'startDate': this.startDate,
-      'endDate': this.endDate,
-      'participents': this.soldiers.map(val => val.userName)
-    }).subscribe(val => {
-      this.miniCalendarService.changeDate(new Date(val.startDate));
-    });
-    this.dialogRef.close();
+    if (this.selectedMission && this.startDate && this.endDate && this.soldiers && this.endDate >= this.startDate) {
+      this.misisonService.addMission({
+        'type': this.selectedMission,
+        'startDate': this.startDate,
+        'endDate': this.endDate,
+        'participents': this.soldiers.map(val => val.userName)
+      }).subscribe(val => {
+        this.miniCalendarService.changeDate(new Date(val.startDate));
+      });
+      this.dialogRef.close();
+    }
   }
 
   activeStep1Event(): void {
@@ -67,9 +69,15 @@ export class DialogComponent {
       this.show1 = false;
       this.startDate = new Date(this.startDateStr);
 
-      if (this.startDate && this.endDate != undefined && this.soldiers.length != 0) {
+      if (this.startDate && this.endDate != undefined && this.soldiers.length != 0 && this.endDate >= this.startDate) {
         this.stateStep2 = StepState.Complete;
+        this.errorMsg = "";
       } else {
+        if (this.endDate < this.startDate)
+          this.errorMsg = "בחר תאריך סיום תקין!";
+        else if (!this.soldiers.length && this.endDate >= this.startDate)
+          this.errorMsg = "שייך חייל!";
+        this.show2 = true;
         this.stateStep2 = StepState.Required;
       }
     } else {
@@ -96,9 +104,12 @@ export class DialogComponent {
     }
   }
   deactiveStep1Event(): void {
-    if (this.startDate && this.endDate != undefined && this.soldiers.length != 0) {
+    if (this.startDate && this.endDate != undefined && this.endDate >= this.startDate && this.soldiers.length != 0) {
       this.stateStep2 = StepState.Complete;
+      this.errorMsg = "";
     } else {
+      if (this.soldiers.length)
+        this.errorMsg = "שייך חייל!";
       this.stateStep2 = StepState.Required;
     }
   }
@@ -116,12 +127,15 @@ export class DialogComponent {
   }
 
   sendToAddSoldier() {
-    if (this.selectedMission && this.endDate) {
+    if (this.selectedMission && this.endDate && this.endDate >= this.startDate) {
       this.activeStep = 2;
       this.show2 = false;
+      this.errorMsg = "";
       this.cdRef.detectChanges();
     } else {
       this.show2 = true;
+      this.errorMsg = "בחר תאריך סיום תקין!";
+      this.cdRef.detectChanges();
     }
   }
 
