@@ -1,0 +1,13 @@
+a:link {
+  /* Applies to all unvisited links */
+  text-decoration: none;
+  font-weight: bold;
+  color: black;
+}
+
+a:visited {
+  /* Applies to all visited links */
+  text-decoration: none;
+  font-weight: bold;
+  color: black;
+}
