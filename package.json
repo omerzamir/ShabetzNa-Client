@@ -27,6 +27,7 @@
     "@material2-extra/calendar": "0.1.1",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-beta.5",
     "angular-calendar": "0.21.2",
+    "angular-polyfills": "1.0.1",
     "core-js": "2.5.1",
     "libhdate": "0.3.2",
     "moment": "2.18.1",
